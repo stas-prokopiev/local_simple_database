@@ -2,7 +2,6 @@ from __future__ import print_function
 import os
 
 import datetime
-import logging
 import numbers
 from filelock import FileLock
 #####
@@ -11,8 +10,6 @@ from local_simple_database.working_with_files import \
     check_that_folder_exist_otherwise_create
 from local_simple_database.working_with_files import read_whole_file
 from local_simple_database.working_with_files import save_whole_file
-from local_simple_database.working_with_files import \
-    save_list_of_fields_in_file
 #####
 # .additional_functions
 from local_simple_database.additional_functions import \
@@ -30,39 +27,20 @@ class class_database_handler_general():
     ):
         """"""
         self.obj_parent_database = obj_parent_database
+        self.logger = self.obj_parent_database.logger
         self.str_database_name = str_database_name
-        self.bool_if_to_use_everyday_rolling = \
-            self.obj_parent_database.bool_if_to_use_everyday_rolling
-
         self.str_file_path_with_db_file = ""
+
         if not hasattr(self, 'str_database_type'):
             self.str_database_type = ""
-
-
-    def get_folder_for_databases(self):
-        """"""
-        if not self.bool_if_to_use_everyday_rolling:
-            return self.obj_parent_database.str_path_main_database_dir
-
-        STR_FOLDER_NAME_TEMPLATE = "%Y_%m_%d"
-        str_date_for_current_delay = \
-            datetime.datetime.today().strftime(STR_FOLDER_NAME_TEMPLATE)
-        str_db_folder = os.path.join(
-            self.obj_parent_database.str_path_main_database_dir,
-            str_date_for_current_delay
-        )
-        check_that_folder_exist_otherwise_create(
-            str_db_folder
-        )
-        return str_db_folder
 
     def get_file_path_with_db_file(self):
         """"""
         if (
             not self.str_file_path_with_db_file or
-            self.bool_if_to_use_everyday_rolling
+            self.obj_parent_database.bool_if_to_use_everyday_rolling
         ):
-            str_db_folder = self.get_folder_for_databases()
+            str_db_folder = self.obj_parent_database.get_folder_for_databases()
             #####
             # Define file name with db
             if self.str_database_name.startswith(self.str_database_type + "_"):
@@ -147,11 +125,11 @@ class class_int_database_handler(class_database_handler_general):
         try:
             return int(str_file_content)
         except ValueError:
-            logging.error(
+            self.logger.error(
                 "For database: " + str(self.str_database_name) +
                 " Unable to read INT value from database."
             )
-            logging.debug(
+            self.logger.debug(
                 "Current content of database file: " + str_file_content
             )
             raise
@@ -164,7 +142,7 @@ class class_int_database_handler(class_database_handler_general):
         )
         str_content = "%d" % int_value_to_set
         self.save_file_content(str_content)
-        logging.debug(
+        self.logger.debug(
             "For database: " + str(self.str_database_name) +
             " Saved value: " + str_content
         )
@@ -194,11 +172,11 @@ class class_float_database_handler(class_database_handler_general):
         try:
             return float(str_file_content)
         except ValueError:
-            logging.error(
+            self.logger.error(
                 "For database: " + str(self.str_database_name) +
                 " Unable to read FLOAT value from database."
             )
-            logging.debug(
+            self.logger.debug(
                 "Current content of database file: " + str_file_content
             )
             raise
@@ -211,7 +189,7 @@ class class_float_database_handler(class_database_handler_general):
         )
         str_content = str(float_value_to_set)
         self.save_file_content(str_content)
-        logging.debug(
+        self.logger.debug(
             "For database: " + str(self.str_database_name) +
             " Saved value: " + str_content
         )
@@ -242,11 +220,11 @@ class class_list_database_handler(class_database_handler_general):
             list_str_fields = get_list_of_fields_from_string(str_file_content)
             return list_str_fields
         except ValueError:
-            logging.error(
+            self.logger.error(
                 "For database: " + str(self.str_database_name) +
                 " Unable to read LIST of values from database."
             )
-            logging.debug(
+            self.logger.debug(
                 "Current content of database file: " + str_file_content
             )
             raise
@@ -261,7 +239,7 @@ class class_list_database_handler(class_database_handler_general):
         list_str_values_to_set = list(map(str, list_values_to_set))
         str_content = "\n".join(list_str_values_to_set)
         self.save_file_content(str_content)
-        logging.debug(
+        self.logger.debug(
             "For database: " + str(self.str_database_name) +
             " Saved value: " + str_content
         )

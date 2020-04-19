@@ -1,6 +1,7 @@
 import os
 import logging
 
+
 def read_whole_file(str_path_to_file):
     """Reading whole file as string in utf-8"""
     with open(str_path_to_file, 'r', encoding="utf8", errors='ignore') as f:
@@ -41,34 +42,34 @@ def get_list_names_of_folders_in_folder(str_path_where_to_look):
     return list_alphas_folders
 
 
-def get_list_of_fields_in_file(str_path_to_file):
-    """
-    """
-    # Check that file exists
-    if(not os.path.exists(str_path_to_file)):
-        return []
-    list_of_fields = []
-    str_whole_file = read_whole_file(str_path_to_file)
-    # Delete empty lines
-    list_file_splitted_by_lines = [
-        str_one_line
-        for str_one_line in str_whole_file.splitlines()
-        if str_one_line
-    ]
-    for line in list_file_splitted_by_lines:
-        list_of_fields += [elem for elem in line.split(" ") if elem]
-    return list_of_fields
-
-
-def save_list_of_fields_in_file(
-        list_of_fields,
-        str_path_to_file,
-        endl="\n",
+def get_names_of_files_in_the_folder(
+        str_folder_where_to_look="",
+        str_extension=".txt"
 ):
-    """Функция Сохраняем в файл список полей"""
-    str_whole_file_to_save = ""
-    for elem in list_of_fields:
-        str_whole_file_to_save += str(elem) + endl
-    save_whole_file(str_path_to_file, str_whole_file_to_save)
-    return 1
+    """Get names of all files in folder with asked extension"""
+    assert isinstance(str_folder_where_to_look, str), (
+        "ERROR: path to folder where to look for files should have type STR" +
+        ", Now it has type: " +
+        str(type(str_folder_where_to_look))
+    )
+    if not os.path.exists(str_folder_where_to_look):
+        logging.warning(
+            "Folder to get filenames doesn't exist: " +
+            str_folder_where_to_look
+        )
+        return []
+    #####
+    list_all_filenames_in_the_folder = [
+        str_filename
+        for str_filename in os.listdir(str_folder_where_to_look)
+        if os.path.isfile(os.path.join(str_folder_where_to_look, str_filename))
+    ]
+    if str_extension:
+        list_all_filenames_in_the_folder = [
+            str_filename
+            for str_filename in list_all_filenames_in_the_folder
+            if str_filename.endswith(str_extension)
+        ]
+    return list_all_filenames_in_the_folder
+
 

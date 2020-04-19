@@ -1,15 +1,21 @@
 from __future__ import print_function
 import os
-import logging
+import datetime
+from collections import OrderedDict
 
-
+#####
+# .working_with_files
 from local_simple_database.working_with_files import \
     check_that_folder_exist_otherwise_create
 from local_simple_database.working_with_files import \
+    get_names_of_files_in_the_folder
+from local_simple_database.working_with_files import \
     get_list_names_of_folders_in_folder
-
 #####
-# local_simple_database.database_handlers
+# .additional_functions
+from local_simple_database.additional_functions import get_library_logger
+#####
+# .database_handlers
 from local_simple_database.database_handlers import \
     class_str_database_handler
 from local_simple_database.database_handlers import \
@@ -20,6 +26,8 @@ from local_simple_database.database_handlers import \
     class_list_database_handler
 #####
 LIST_ALL_SUPPORTED_TYPES_OF_DB = ["int", "float", "str", "list"]
+INT_LOG_LEVEL = 10
+STR_FOLDER_NAME_TEMPLATE = "%Y%m%d"
 
 
 class class_local_simple_database():
@@ -33,6 +41,7 @@ class class_local_simple_database():
         """"""
         if not str_path_database_dir:
             str_path_database_dir = "local_database"
+        self.logger = get_library_logger(INT_LOG_LEVEL)
         self.str_path_main_database_dir = \
             os.path.abspath(str_path_database_dir)
         check_that_folder_exist_otherwise_create(
@@ -83,7 +92,7 @@ class class_local_simple_database():
             " Only accessible types are: " +
             str(LIST_ALL_SUPPORTED_TYPES_OF_DB)
         )
-        logging.info(
+        self.logger.info(
             "Initialize new empty database with name " +
             str_db_name +
             " With type of values: " + str(str_database_type).upper()
@@ -101,6 +110,95 @@ class class_local_simple_database():
             self.dict_db_handler_by_str_db_name[str_db_name] = \
                 class_list_database_handler(self, str_db_name)
 
+    def get_folder_for_databases(self):
+        """"""
+        if not self.bool_if_to_use_everyday_rolling:
+            return self.str_path_main_database_dir
+
+        str_date_for_current_delay = \
+            datetime.datetime.today().strftime(STR_FOLDER_NAME_TEMPLATE)
+        str_db_folder = os.path.join(
+            self.str_path_main_database_dir,
+            str_date_for_current_delay
+        )
+        check_that_folder_exist_otherwise_create(
+            str_db_folder
+        )
+        return str_db_folder
+
+    def get_list_names_of_all_files_with_DBs_in_dir(self, str_db_folder):
+        """"""
+        list_names_of_DB_files = []
+        list_str_filenames = get_names_of_files_in_the_folder(
+            str_db_folder,
+            str_extension=".txt"
+        )
+        list_str_filenames = [
+            str_filename.replace(".txt", "")
+            for str_filename in list_str_filenames
+        ]
+        self.logger.debug(
+            "Found files that can be considered as DB file: %d"
+            % len(list_str_filenames)
+        )
+        # For every file with DB get data from file
+        for str_filename in list_str_filenames:
+            self.logger.debug("Get data from: " + str_filename)
+            for str_type in LIST_ALL_SUPPORTED_TYPES_OF_DB:
+                if str_filename.startswith(str_type):
+                    self.logger.debug(
+                        "For file with name: " + str_filename +
+                        " Found type: " + str_type
+                    )
+                    list_names_of_DB_files.append(str_filename)
+                    break
+            else:
+                self.logger.warning(
+                    "Strange file in DataBase folder with name: " +
+                    str_filename +
+                    " Unable to get data for it."
+                )
+        return list_names_of_DB_files
+
+    def get_dict_DBs_data_by_DB_name(self):
+        """"""
+        dict_data_by_str_db_name = {}
+        str_db_folder = self.get_folder_for_databases()
+        self.logger.debug(
+            "Collect all DB data as dict for folder: " + str_db_folder
+        )
+        list_names_of_DB_files = \
+            self.get_list_names_of_all_files_with_DBs_in_dir(str_db_folder)
+        for str_db_name in list_names_of_DB_files:
+            dict_data_by_str_db_name[str_db_name] = self[str_db_name]
+        return dict_data_by_str_db_name
+
+
+    def get_dict_dict_DBs_data_by_DB_name_by_date(self):
+        """"""
+
+        dict_dict_DBs_data_by_DB_name_by_date = OrderedDict()
+        #####
+        # Get sorted list of names with dirs with DB data
+        list_dir_names_with_daily_data = get_list_names_of_folders_in_folder(
+            self.str_path_main_database_dir
+        )
+
+
+
+        #####
+        for str_dir_name in list_dir_names_with_daily_data:
+            str_dir_path = \
+                os.path.join(self.str_path_main_database_dir, str_dir_name)
+            db_obj = class_local_simple_database(str_dir_path)
+
+            db_obj.get_dict_DBs_data_by_DB_name()
+        return dict_dict_DBs_data_by_DB_name_by_date
+
+
+    def get_one_DB_data_daily(self):
+        """"""
+        pass
 
 
 
