@@ -31,14 +31,17 @@ def check_that_folder_exist_otherwise_create(str_path_to_folder):
 
 def get_list_names_of_folders_in_folder(str_path_where_to_look):
     """Get names of all folders in the folder"""
-    if os.path.exists(str_path_where_to_look):
-        list_alphas_folders = [
-            f.path
-            for f in os.scandir(str_path_where_to_look)
-            if f.is_dir()
-        ]
-    else:
-        list_alphas_folders = []
+    if not os.path.exists(str_path_where_to_look):
+        logging.warning(
+            "Folder to get dir names inside doesn't exist: " +
+            str_path_where_to_look
+        )
+        return []
+    list_alphas_folders = [
+        os.path.basename(f.path)
+        for f in os.scandir(str_path_where_to_look)
+        if f.is_dir()
+    ]
     return list_alphas_folders
 
 

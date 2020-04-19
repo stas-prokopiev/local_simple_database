@@ -126,9 +126,10 @@ class class_local_simple_database():
         )
         return str_db_folder
 
-    def get_list_names_of_all_files_with_DBs_in_dir(self, str_db_folder):
+    def get_list_names_of_all_files_with_DBs_in_dir(self):
         """"""
         list_names_of_DB_files = []
+        str_db_folder = self.get_folder_for_databases()
         list_str_filenames = get_names_of_files_in_the_folder(
             str_db_folder,
             str_extension=".txt"
@@ -160,45 +161,76 @@ class class_local_simple_database():
                 )
         return list_names_of_DB_files
 
-    def get_dict_DBs_data_by_DB_name(self):
+    def get_dir_names_of_all_dirs_with_daily_DBs(self):
         """"""
-        dict_data_by_str_db_name = {}
-        str_db_folder = self.get_folder_for_databases()
-        self.logger.debug(
-            "Collect all DB data as dict for folder: " + str_db_folder
-        )
-        list_names_of_DB_files = \
-            self.get_list_names_of_all_files_with_DBs_in_dir(str_db_folder)
-        for str_db_name in list_names_of_DB_files:
-            dict_data_by_str_db_name[str_db_name] = self[str_db_name]
-        return dict_data_by_str_db_name
-
-
-    def get_dict_dict_DBs_data_by_DB_name_by_date(self):
-        """"""
-
-        dict_dict_DBs_data_by_DB_name_by_date = OrderedDict()
-        #####
         # Get sorted list of names with dirs with DB data
         list_dir_names_with_daily_data = get_list_names_of_folders_in_folder(
             self.str_path_main_database_dir
         )
-
-
-
-        #####
+        list_int_dir_names = []
         for str_dir_name in list_dir_names_with_daily_data:
-            str_dir_path = \
-                os.path.join(self.str_path_main_database_dir, str_dir_name)
-            db_obj = class_local_simple_database(str_dir_path)
+            try:
+                list_int_dir_names.append(int(str_dir_name))
+            except ValueError:
+                self.logger.warning(
+                    "Unable to define date for folder: " + str_dir_name
+                )
+        return list_int_dir_names
 
-            db_obj.get_dict_DBs_data_by_DB_name()
+    def get_dict_DBs_data_by_DB_name(self):
+        """"""
+        dict_data_by_str_db_name = {}
+        self.logger.debug(
+            "Collect all DB data as dict for folder: " + str_db_folder
+        )
+        list_names_of_DB_files = \
+            self.get_list_names_of_all_files_with_DBs_in_dir()
+        for str_db_name in list_names_of_DB_files:
+            dict_data_by_str_db_name[str_db_name] = self[str_db_name]
+        return dict_data_by_str_db_name
+
+    def get_dict_every_DB_by_date(self):
+        """"""
+        dict_dict_DBs_data_by_DB_name_by_date = OrderedDict()
+        list_int_dir_names = self.get_dir_names_of_all_dirs_with_daily_DBs()
+        #####
+        # Get data from every day
+        for int_dir_name in sorted(list_int_dir_names):
+            str_dir_path = os.path.join(
+                self.str_path_main_database_dir,
+                str(int_dir_name)
+            )
+            db_obj = class_local_simple_database(str_dir_path)
+            dict_dict_DBs_data_by_DB_name_by_date[str(int_dir_name)] = \
+                db_obj.get_dict_DBs_data_by_DB_name()
         return dict_dict_DBs_data_by_DB_name_by_date
 
-
-    def get_one_DB_data_daily(self):
+    def get_one_DB_data_daily(
+            self,
+            str_DB_name,
+            value_to_use_if_DB_not_found=None
+    ):
         """"""
-        pass
+        dict_DBs_results_by_date = OrderedDict()
+        list_int_dir_names = self.get_dir_names_of_all_dirs_with_daily_DBs()
+        #####
+        # Get data from every day
+        for int_dir_name in sorted(list_int_dir_names):
+            str_dir_path = os.path.join(
+                self.str_path_main_database_dir,
+                str(int_dir_name)
+            )
+            db_obj = class_local_simple_database(str_dir_path)
+            list_DBs_names = \
+                db_obj.get_list_names_of_all_files_with_DBs_in_dir()
+
+            if str_DB_name in list_DBs_names:
+                dict_DBs_results_by_date[str(int_dir_name)] = \
+                    db_obj[str_DB_name]
+            elif not isinstance(value_to_use_if_DB_not_found, None):
+                dict_DBs_results_by_date[str(int_dir_name)] = \
+                    value_to_use_if_DB_not_found
+        return dict_DBs_results_by_date
 
 
 
