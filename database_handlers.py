@@ -1,20 +1,13 @@
-from __future__ import print_function
 import os
 
 import datetime
 import numbers
 from filelock import FileLock
 #####
-# .working_with_files
-from local_simple_database.working_with_files import \
-    check_that_folder_exist_otherwise_create
-from local_simple_database.working_with_files import read_whole_file
-from local_simple_database.working_with_files import save_whole_file
+from local_simple_database import working_with_files
 #####
-# .additional_functions
-from local_simple_database.additional_functions import \
-    get_list_of_fields_from_string
-#####
+import logging
+LOGGER = logging.getLogger("local_simple_database")
 
 
 class class_database_handler_general():
@@ -27,7 +20,6 @@ class class_database_handler_general():
     ):
         """"""
         self.obj_parent_database = obj_parent_database
-        self.logger = self.obj_parent_database.logger
         self.str_database_name = str_database_name
         self.str_file_path_with_db_file = ""
 
@@ -63,13 +55,17 @@ class class_database_handler_general():
         if not os.path.exists(str_db_file):
             return ""
         with FileLock(str_db_file + ".lock", timeout=30):
-            return read_whole_file(str_db_file)
+            return working_with_files.read_whole_file(str_db_file)
 
     def save_file_content(self, str_content):
         """"""
         str_db_file = self.get_file_path_with_db_file()
         with FileLock(str_db_file + ".lock", timeout=30):
-            save_whole_file(str_db_file, str_content, str_write_mode='w')
+            working_with_files.save_whole_file(
+                str_db_file,
+                str_content,
+                str_write_mode='w'
+            )
 
 
 class class_str_database_handler(class_database_handler_general):
@@ -125,11 +121,11 @@ class class_int_database_handler(class_database_handler_general):
         try:
             return int(str_file_content)
         except ValueError:
-            self.logger.error(
+            LOGGER.error(
                 "For database: " + str(self.str_database_name) +
                 " Unable to read INT value from database."
             )
-            self.logger.debug(
+            LOGGER.debug(
                 "Current content of database file: " + str_file_content
             )
             raise
@@ -142,7 +138,7 @@ class class_int_database_handler(class_database_handler_general):
         )
         str_content = "%d" % int_value_to_set
         self.save_file_content(str_content)
-        self.logger.debug(
+        LOGGER.debug(
             "For database: " + str(self.str_database_name) +
             " Saved value: " + str_content
         )
@@ -172,11 +168,11 @@ class class_float_database_handler(class_database_handler_general):
         try:
             return float(str_file_content)
         except ValueError:
-            self.logger.error(
+            LOGGER.error(
                 "For database: " + str(self.str_database_name) +
                 " Unable to read FLOAT value from database."
             )
-            self.logger.debug(
+            LOGGER.debug(
                 "Current content of database file: " + str_file_content
             )
             raise
@@ -185,11 +181,11 @@ class class_float_database_handler(class_database_handler_general):
         """"""
         assert isinstance(float_value_to_set, float), (
             "ERROR: You are trying to set value for FLOAT database with " +
-            "INCORRECT type: " + str(type(int_value_to_set))
+            "INCORRECT type: " + str(type(float_value_to_set))
         )
         str_content = str(float_value_to_set)
         self.save_file_content(str_content)
-        self.logger.debug(
+        LOGGER.debug(
             "For database: " + str(self.str_database_name) +
             " Saved value: " + str_content
         )
@@ -217,14 +213,24 @@ class class_list_database_handler(class_database_handler_general):
         if not str_file_content:
             return []
         try:
-            list_str_fields = get_list_of_fields_from_string(str_file_content)
+            # Delete empty lines
+            list_file_splitted_by_lines = [
+                str_one_line
+                for str_one_line in str_file_content.splitlines()
+                if str_one_line
+            ]
+            list_str_fields = []
+            for str_one_line in list_file_splitted_by_lines:
+                list_str_fields += [
+                    elem for elem in str_one_line.split(" ") if elem
+                ]
             return list_str_fields
         except ValueError:
-            self.logger.error(
+            LOGGER.error(
                 "For database: " + str(self.str_database_name) +
                 " Unable to read LIST of values from database."
             )
-            self.logger.debug(
+            LOGGER.debug(
                 "Current content of database file: " + str_file_content
             )
             raise
@@ -239,7 +245,7 @@ class class_list_database_handler(class_database_handler_general):
         list_str_values_to_set = list(map(str, list_values_to_set))
         str_content = "\n".join(list_str_values_to_set)
         self.save_file_content(str_content)
-        self.logger.debug(
+        LOGGER.debug(
             "For database: " + str(self.str_database_name) +
             " Saved value: " + str_content
         )

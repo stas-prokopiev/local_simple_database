@@ -1,5 +1,6 @@
 import os
 import logging
+LOGGER = logging.getLogger("local_simple_database")
 
 
 def read_whole_file(str_path_to_file):
