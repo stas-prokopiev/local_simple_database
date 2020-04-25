@@ -80,12 +80,12 @@ As you can see initialization has 2 optional arguments
 
 To set type of database you have to use type as prefix for the name of database. 
 
-Examples: int_times_cat_purred, float_sec_last_download_took, str_best_friend_name, list_se
+Examples: int_times_cat_purred, float_sec_last_download_took, str_best_friend_name, list_dates_which_I_want_to_celebrate
 
-4) Description of some processes underhood
---------------------------------------------------------------------------------------------------
+If type prefix wasn't given during first initialization, than database will be considerate as int, in that case such names are equal
 
-Also this package can be used for saving some daily statistics (data) you see useful for yourself.
+**DB["times_I_ve_eaten"] == DB["int_times_I_ve_eaten"]**
+
 
 For more info check section: **Typical examples of Usage**
 
@@ -111,90 +111,61 @@ Typical examples of Usage
 
 The first thing you need to do is to initialize database in some directory.
 
-To do so you need to replace "path_to_folder_1" from the code below on most parent folder of all files you want to analyze.
+To do so you need to replace str_path_database_dir from the code below on folder where you would like to store file.
 
 
 .. code-block:: python
 
     from local_simple_databaseimport class_local_simple_database
     DB = class_local_simple_database(
-            str_path_to_your_database,
+            str_path_database_dir="",
             bool_if_to_use_everyday_rolling=False
     )
 
-Please note that first initialization can be a long process if the folders where you search for files are deep and wide.
 
-But after finding all files they won't be downloaded again unless they were changed. So excellent performance is expected.
-
-1) To find all occurrences of some code.
+1) Integer database
 --------------------------------------------------------------------------------------------------
 
-*E.G. You've changed a function signature and want to do necessary changes in the library.*
-
-*To find all the places where this function was used use the code below*
+*If you want to store/access/modify simple int in file from many threads or processes*
 
 .. code-block:: python
 
-    code_searcher_obj.search_code_in_the_library(
-        str_code_to_search="print_places_where_line_length_exceed_N",
-        bool_is_to_search_case_sensitive=True,
-    )
+    # Process 1
+    DB["int_red_cars_drove"] += 1
+    DB["int_red_cars_drove"] += 2
+    # Oh now, last one was burgundy
+    DB["int_red_cars_drove"] -= 1
+    
+    # Process 2
+    print("red cars already found", DB["int_red_cars_drove"])  
+    # If there was no such DataBase yet, than in will be created and 0 value will be returned.
+    DB["int_red_cars_drove"] = 0
+    print("red cars already found", DB["int_red_cars_drove"]) 
 
-*Output:*
-
-.. code-block:: console
-
-    For folder: c:\users\stanislav\desktop\my_python_projects\code_search_engine\project\code_searcher\src\code_searcher
-
-    --> For extension: .py
-    ----> Found in:  code_searcher_class.py
-    ------> 0) line: 93  Code_line: print_places_where_line_length_exceed_N(
-    ------> 1) line: 444  Code_line: def print_places_where_line_length_exceed_N(
-
-    --> For extension: ipynb
-    ----> NOTHING FOUND.
-
-
-2) To find all occurrences of some regular expression pattern
+2) Float database
 --------------------------------------------------------------------------------------------------
-
-
-One example where it can be useful, let's say that you want to store time interval in which you got response from the server, then you can store it 
-
 
 .. code-block:: python
 
-    code_searcher_obj.search_code_in_the_library_with_re(
-        str_code_to_search="^from __future__ import[\s]+"
-    )
+    DB["float_last_price_of_watermelon"] = 7.49
+    # Too many watermelons this year, need to apply 30% discount
+    DB["float_last_price_of_watermelon"] *= 0.7
+    print("Hello my best customer, current price on watermelon is: ", DB["float_last_price_of_watermelon"])
+    
 
-*Output:*
-
-.. code-block:: console
-
-    For folder: c:\users\stanislav\desktop\my_python_projects\code_search_engine\project\code_searcher\src\code_searcher
-
-        --> For extension: .py
-        ----> Found in:  additional_functions.py
-        ------> 0) line: 12  Code_line: from __future__ import print_function
-        ----> Found in:  code_searcher_class.py
-        ------> 1) line: 11  Code_line: from __future__ import print_function
-        ----> Found in:  decorators.py
-        ------> 2) line: 12  Code_line: from __future__ import print_function
-        ----> Found in:  working_with_files.py
-        ------> 3) line: 12  Code_line: from __future__ import print_function
-
-        --> For extension: ipynb
-        ----> NOTHING FOUND.
-
-4) To add new files to examine.
+3) Database with list of value
 --------------------------------------------------------------------------------------------------
-
-*If you've created a new file inside folder given to code_searcher then you should update files for code_searcher*
 
 .. code-block:: python
 
-    code_searcher_obj.update_files()
+    DB["list_dollars_spent_on_useless_stuff"] += [2]
+    DB["list_dollars_spent_on_useless_stuff"] += [2.3]
+    DB["list_dollars_spent_on_useless_stuff"] += [999]
+    list_dollars_spent = DB["list_dollars_spent_on_useless_stuff"]
+    float_overall_spent = sum(map(float, list_dollars_spent))
+    print("Spent: ", float_overall_spent)
+    # Oh don't worry honey, money dosen't matter to me
+    DB["list_dollars_spent_on_useless_stuff"] = []
 
 
 Links
@@ -231,5 +202,3 @@ License
 =======
 
 This project is licensed under the MIT License.
-
-inee a  sedimerom leileath herl beac
