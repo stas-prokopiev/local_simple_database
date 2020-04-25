@@ -11,23 +11,46 @@ LOGGER = logging.getLogger("local_simple_database")
 
 
 class class_database_handler_general():
-    """"""
+    """This class was built to handle one(any) DataBase
 
+    ...
+
+    Attributes
+    ----------
+    self.obj_parent_database : object
+        Handler of all DataBases in the folder
+    self.str_database_name : str
+        Name of current DataBase
+    self.str_file_path_with_db_file : str
+        Path to file with database (If rolling is on, then will be updated)
+    self.str_database_type : str
+        Type of DataBase, which values it contains
+    """
     def __init__(
             self,
             obj_parent_database,
             str_database_name,
     ):
-        """"""
+        """Constructor. Initialization of common variables for every DataBase
+
+        Parameters
+        ----------
+        self.obj_parent_database : object
+            Handler of all DataBases in the folder
+        self.str_database_name : str
+            Name of current DataBase
+        """
         self.obj_parent_database = obj_parent_database
         self.str_database_name = str_database_name
         self.str_file_path_with_db_file = ""
-
-        if not hasattr(self, 'str_database_type'):
-            self.str_database_type = ""
+        self.str_database_type = ""
 
     def get_file_path_with_db_file(self):
-        """"""
+        """Get path to file with DataBase
+
+        Parameters
+        ----------
+        """
         if (
             not self.str_file_path_with_db_file or
             self.obj_parent_database.bool_if_to_use_everyday_rolling
@@ -50,7 +73,11 @@ class class_database_handler_general():
         return self.str_file_path_with_db_file
 
     def read_file_content(self):
-        """"""
+        """Read whole content of file with DataBase
+
+        Parameters
+        ----------
+        """
         str_db_file = self.get_file_path_with_db_file()
         if not os.path.exists(str_db_file):
             return ""
@@ -58,7 +85,11 @@ class class_database_handler_general():
             return working_with_files.read_whole_file(str_db_file)
 
     def save_file_content(self, str_content):
-        """"""
+        """Save content to file with DataBase
+
+        Parameters
+        ----------
+        """
         str_db_file = self.get_file_path_with_db_file()
         with FileLock(str_db_file + ".lock", timeout=30):
             working_with_files.save_whole_file(
@@ -69,14 +100,21 @@ class class_database_handler_general():
 
 
 class class_str_database_handler(class_database_handler_general):
-    """"""
-
+    """This class was built to handle DataBase with strings"""
     def __init__(
             self,
             obj_parent_database,
             str_database_name,
     ):
-        """"""
+        """Constructor. Initialization of common variables for every DataBase
+
+        Parameters
+        ----------
+        self.obj_parent_database : object
+            Handler of all DataBases in the folder
+        self.str_database_name : str
+            Name of current DataBase
+        """
         # Init parent class
         super(class_str_database_handler, self).__init__(
             obj_parent_database,
@@ -85,7 +123,11 @@ class class_str_database_handler(class_database_handler_general):
         self.str_database_type = "str"
 
     def get_value(self):
-        """"""
+        """Get current value in DataBase
+
+        Parameters
+        ----------
+        """
         return self.read_file_content()
 
     def set_value(self, str_value_to_set):
@@ -98,14 +140,22 @@ class class_str_database_handler(class_database_handler_general):
 
 
 class class_int_database_handler(class_database_handler_general):
-    """"""
+    """This class was built to handle DataBase with Integers"""
 
     def __init__(
             self,
             obj_parent_database,
             str_database_name,
     ):
-        """"""
+        """Constructor. Initialization of common variables for every DataBase
+
+        Parameters
+        ----------
+        self.obj_parent_database : object
+            Handler of all DataBases in the folder
+        self.str_database_name : str
+            Name of current DataBase
+        """
         # Init parent class
         super(class_int_database_handler, self).__init__(
             obj_parent_database,
@@ -114,7 +164,11 @@ class class_int_database_handler(class_database_handler_general):
         self.str_database_type = "int"
 
     def get_value(self):
-        """"""
+        """Get current value in DataBase
+
+        Parameters
+        ----------
+        """
         str_file_content = self.read_file_content()
         if not str_file_content:
             return 0
@@ -145,14 +199,22 @@ class class_int_database_handler(class_database_handler_general):
 
 
 class class_float_database_handler(class_database_handler_general):
-    """"""
+    """This class was built to handle DataBase with Floats"""
 
     def __init__(
             self,
             obj_parent_database,
             str_database_name,
     ):
-        """"""
+        """Constructor. Initialization of common variables for every DataBase
+
+        Parameters
+        ----------
+        self.obj_parent_database : object
+            Handler of all DataBases in the folder
+        self.str_database_name : str
+            Name of current DataBase
+        """
         # Init parent class
         super(class_float_database_handler, self).__init__(
             obj_parent_database,
@@ -161,7 +223,11 @@ class class_float_database_handler(class_database_handler_general):
         self.str_database_type = "float"
 
     def get_value(self):
-        """"""
+        """Get current value in DataBase
+
+        Parameters
+        ----------
+        """
         str_file_content = self.read_file_content()
         if not str_file_content:
             return 0.0
@@ -192,14 +258,22 @@ class class_float_database_handler(class_database_handler_general):
 
 
 class class_list_database_handler(class_database_handler_general):
-    """"""
+    """This class was built to handle DataBase with List of values"""
 
     def __init__(
             self,
             obj_parent_database,
             str_database_name,
     ):
-        """"""
+        """Constructor. Initialization of common variables for every DataBase
+
+        Parameters
+        ----------
+        self.obj_parent_database : object
+            Handler of all DataBases in the folder
+        self.str_database_name : str
+            Name of current DataBase
+        """
         # Init parent class
         super(class_list_database_handler, self).__init__(
             obj_parent_database,
@@ -208,7 +282,11 @@ class class_list_database_handler(class_database_handler_general):
         self.str_database_type = "list"
 
     def get_value(self):
-        """"""
+        """Get current value in DataBase
+
+        Parameters
+        ----------
+        """
         str_file_content = self.read_file_content()
         if not str_file_content:
             return []
