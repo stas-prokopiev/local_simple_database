@@ -71,14 +71,14 @@ As you can see initialization has 2 optional arguments
 
 1. If explicit path to database is not given, then will be used path "./local_database"
     Folder for database-s will be created automaticaly
-2. If flag bool_if_to_use_everyday_rolling set to True, 
-    then inside database folder will be created additional folders with names YYYYMMDD. 
+2. If flag bool_if_to_use_everyday_rolling set to True,
+    then inside database folder will be created additional folders with names YYYYMMDD.
     Add with every access to DB you will be getting todays database data.
 
 3) How to name database-s
 --------------------------------------------------------------------------------------------------
 
-To set type of database you have to use type as prefix for the name of database. 
+To set type of database you have to use type as prefix for the name of database.
 
 Examples: int_times_cat_purred, float_sec_last_download_took, str_best_friend_name, list_dates_which_I_want_to_celebrate
 
@@ -135,12 +135,12 @@ To do so you need to replace str_path_database_dir from the code below on folder
     DB["int_red_cars_drove"] += 2
     # Oh now, last one was burgundy
     DB["int_red_cars_drove"] -= 1
-    
+
     # Process 2
-    print("red cars already found", DB["int_red_cars_drove"])  
+    print("red cars already found", DB["int_red_cars_drove"])
     # If there was no such DataBase yet, than in will be created and 0 value will be returned.
     DB["int_red_cars_drove"] = 0
-    print("red cars already found", DB["int_red_cars_drove"]) 
+    print("red cars already found", DB["int_red_cars_drove"])
 
 2) Float database
 --------------------------------------------------------------------------------------------------
@@ -151,7 +151,7 @@ To do so you need to replace str_path_database_dir from the code below on folder
     # Too many watermelons this year, need to apply 30% discount
     DB["float_last_price_of_watermelon"] *= 0.7
     print("Hello my best customer, current price on watermelon is: ", DB["float_last_price_of_watermelon"])
-    
+
 
 3) Database with list of value
 --------------------------------------------------------------------------------------------------
