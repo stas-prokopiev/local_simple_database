@@ -10,7 +10,6 @@ from filelock import FileLock
 # Local imports
 from local_simple_database.constants import LIST_ALL_SUPPORTED_TYPES_OF_DB
 
-STR_FOLDER_NAME_TEMPLATE = "%Y%m%d"
 LOGGER = logging.getLogger("local_simple_database")
 
 
@@ -25,14 +24,15 @@ class class_local_database():
     ----------
     self.str_path_main_database_dir : str
         Path to main folder with DataBase-s
-    self.bool_if_to_use_everyday_rolling : bool
-        Flag if to use everyday rolling and save DB-s in folders like 20200101
     """
 
     def __init__(
             self,
             str_path_database_dir="",
-            bool_if_to_use_everyday_rolling=False,
+
+            str_datetime_template_rolling=None,
+
+
     ):
         """Init DB-s object
 
@@ -40,8 +40,6 @@ class class_local_database():
         ----------
         str_path_database_dir : str, optional
             Path to main folder with DataBase-s (default is ".")
-        bool_if_to_use_everyday_rolling : list, optional
-            Flag if to use everyday rolling (default is False)
         """
         if not str_path_database_dir:
             str_path_database_dir = "local_database"
@@ -51,7 +49,7 @@ class class_local_database():
         if (not os.path.isdir(self.str_path_main_database_dir)):
             os.makedirs(self.str_path_main_database_dir)
         #####
-        self.bool_if_to_use_everyday_rolling = bool_if_to_use_everyday_rolling
+        self.str_datetime_template_rolling = str_datetime_template_rolling
 
     def read_file_content(self, str_db_name):
         """Read whole content of file with DataBase
@@ -84,13 +82,14 @@ class class_local_database():
         Parameters
         ----------
         """
-        if not self.bool_if_to_use_everyday_rolling:
+        if not self.str_datetime_template_rolling:
             return self.str_path_main_database_dir
-        str_date_for_current_delay = \
-            datetime.datetime.today().strftime(STR_FOLDER_NAME_TEMPLATE)
+        str_folder_name = datetime.datetime.today().strftime(
+            self.str_datetime_template_rolling
+        )
         str_db_folder = os.path.join(
             self.str_path_main_database_dir,
-            str_date_for_current_delay
+            str_folder_name
         )
         if (not os.path.isdir(str_db_folder)):
             os.makedirs(str_db_folder)
@@ -199,13 +198,13 @@ class class_local_database():
             try:
                 datetime.datetime.strptime(
                     str_dir_name,
-                    STR_FOLDER_NAME_TEMPLATE
+                    self.str_datetime_template_rolling
                 )
                 list_dir_names_cleared.append(str_dir_name)
             except ValueError:
                 LOGGER.warning(
                     "Folder name doesn't satisfy template %s: %s",
-                    STR_FOLDER_NAME_TEMPLATE,
+                    self.str_datetime_template_rolling,
                     str_dir_name
                 )
         return list_dir_names_cleared

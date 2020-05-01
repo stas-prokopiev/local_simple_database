@@ -24,8 +24,6 @@ class class_local_dict_database(class_local_database):
     ----------
     self.str_path_main_database_dir : str
         Path to main folder with DataBase-s
-    self.bool_if_to_use_everyday_rolling : bool
-        Flag if to use everyday rolling and save DB-s in folders like 20200101
     self.dict_db_handler_by_str_db_name : dict
         {str_db_name_1: handler_to_process_db_data, ...}
     """
@@ -34,7 +32,8 @@ class class_local_dict_database(class_local_database):
             self,
             str_path_database_dir="",
             default_value=None,
-            bool_if_to_use_everyday_rolling=False,
+
+            str_datetime_template_rolling=None,
     ):
         """Init DB-s object
 
@@ -42,13 +41,11 @@ class class_local_dict_database(class_local_database):
         ----------
         str_path_database_dir : str, optional
             Path to main folder with DataBase-s (default is ".")
-        bool_if_to_use_everyday_rolling : list, optional
-            Flag if to use everyday rolling (default is False)
         """
         # Init class of all local DataBases
         super(class_local_dict_database, self).__init__(
             str_path_database_dir=str_path_database_dir,
-            bool_if_to_use_everyday_rolling=bool_if_to_use_everyday_rolling,
+            str_datetime_template_rolling=str_datetime_template_rolling,
         )
         self.default_value = default_value
         self.dict_db_handler_by_str_db_name = {}
