@@ -8,7 +8,7 @@ import logging
 from filelock import FileLock
 
 # Local imports
-from local_simple_database import LIST_ALL_SUPPORTED_TYPES_OF_DB
+from local_simple_database.constants import LIST_ALL_SUPPORTED_TYPES_OF_DB
 
 STR_FOLDER_NAME_TEMPLATE = "%Y%m%d"
 LOGGER = logging.getLogger("local_simple_database")

@@ -1,12 +1,18 @@
+
+# Standard library imports
+# Third party imports
+
+# Local imports
 from local_simple_database.class_local_simple_database import \
     class_local_simple_database
+from local_simple_database.class_local_dict_database import \
+    class_local_dict_database
 
-
-LIST_SIMPLE_DB_TYPES = ["int", "float", "str"]
-LIST_ALL_SUPPORTED_TYPES_OF_DB = LIST_SIMPLE_DB_TYPES + ["dict"]
 
 __all__ = [
     "class_local_simple_database",
+    "class_local_dict_database"
+
 ]
 
 

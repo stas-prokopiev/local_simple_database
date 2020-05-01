@@ -33,6 +33,7 @@ class class_local_dict_database(class_local_database):
     def __init__(
             self,
             str_path_database_dir="",
+            default_value=None,
             bool_if_to_use_everyday_rolling=False,
     ):
         """Init DB-s object
@@ -49,6 +50,7 @@ class class_local_dict_database(class_local_database):
             str_path_database_dir=str_path_database_dir,
             bool_if_to_use_everyday_rolling=bool_if_to_use_everyday_rolling,
         )
+        self.default_value = default_value
         self.dict_db_handler_by_str_db_name = {}
 
     def __getitem__(self, str_db_name):
@@ -61,7 +63,11 @@ class class_local_dict_database(class_local_database):
         """
         if str_db_name not in self.dict_db_handler_by_str_db_name:
             self.dict_db_handler_by_str_db_name[str_db_name] = \
-                class_dict_database_handler(self, str_db_name)
+                class_dict_database_handler(
+                    self,
+                    str_db_name,
+                    default_value=self.default_value
+                )
         return self.dict_db_handler_by_str_db_name[str_db_name]
 
     def __setitem__(self, str_db_name, dict_values_to_set):
@@ -81,7 +87,11 @@ class class_local_dict_database(class_local_database):
         # Set value for database
         if str_db_name not in self.dict_db_handler_by_str_db_name:
             self.dict_db_handler_by_str_db_name[str_db_name] = \
-                class_dict_database_handler(self, str_db_name)
+                class_dict_database_handler(
+                    self,
+                    str_db_name,
+                    default_value=self.default_value
+                )
         self.dict_db_handler_by_str_db_name[str_db_name].set_value(
             dict_values_to_set
         )
@@ -91,5 +101,8 @@ class class_local_dict_database(class_local_database):
             len(dict_values_to_set)
         )
 
+    def change_default_value(self, new_default_value):
+        """"""
+        self.default_value = new_default_value
 
 
