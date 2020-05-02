@@ -47,8 +47,13 @@ class class_local_dict_database(class_local_database):
             str_path_database_dir=str_path_database_dir,
             str_datetime_template_rolling=str_datetime_template_rolling,
         )
+        self.list_supported_types = ["dict"]
         self.default_value = default_value
         self.dict_db_handler_by_str_db_name = {}
+
+    def init_new_class_obj(self, **kwargs):
+        """"""
+        return class_local_dict_database(**kwargs)
 
     def __getitem__(self, str_db_name):
         """self[database_name]   method for getting DB current value
