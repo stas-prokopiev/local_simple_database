@@ -12,10 +12,9 @@ from filelock import FileLock
 LOGGER = logging.getLogger("local_simple_database")
 
 
-
-class class_local_database():
+class virtual_class_all_local_databases():
     """
-    This class was built to handle all DataBase-s in one folder
+    This is virtual class to handle all needs for all child DataBases
 
     ...
 
@@ -23,19 +22,25 @@ class class_local_database():
     ----------
     self.str_path_main_database_dir : str
         Path to main folder with DataBase-s
+    self.str_datetime_template_for_rolling : str
+        Datetime template for folder name if to use rolling
+    self.list_supported_types : list
+        DataBase Types with which this local database can work
     """
 
     def __init__(
             self,
             str_path_database_dir="",
-            str_datetime_template_rolling=None,
+            str_datetime_template_for_rolling="",
     ):
-        """Init DB-s object
+        """Init common stuff for all DB-s object
 
         Parameters
         ----------
         str_path_database_dir : str, optional
             Path to main folder with DataBase-s (default is ".")
+        str_datetime_template_for_rolling : str
+            Datetime template for folder name if to use rolling
         """
         if not str_path_database_dir:
             str_path_database_dir = "local_database"
@@ -45,18 +50,16 @@ class class_local_database():
         if (not os.path.isdir(self.str_path_main_database_dir)):
             os.makedirs(self.str_path_main_database_dir)
         #####
-        self.str_datetime_template_rolling = str_datetime_template_rolling
+        self.str_datetime_template_for_rolling = str_datetime_template_for_rolling
         self.list_supported_types = []
-
-    def init_new_class_obj(self, **kwargs):
-        """"""
-        return class_local_database(**kwargs)
 
     def read_file_content(self, str_db_name):
         """Read whole content of file with DataBase
 
         Parameters
         ----------
+        str_db_name : str
+            Name of asked database
         """
         str_db_file = self.get_file_path_with_db_file(str_db_name)
         if not os.path.exists(str_db_file):
@@ -71,6 +74,10 @@ class class_local_database():
 
         Parameters
         ----------
+        str_content : str
+            Content to save in database file
+        str_db_name : str
+            Name of asked database
         """
         str_db_file = self.get_file_path_with_db_file(str_db_name)
         with FileLock(str_db_file + ".lock", timeout=30):
@@ -83,10 +90,10 @@ class class_local_database():
         Parameters
         ----------
         """
-        if not self.str_datetime_template_rolling:
+        if not self.str_datetime_template_for_rolling:
             return self.str_path_main_database_dir
         str_folder_name = datetime.datetime.today().strftime(
-            self.str_datetime_template_rolling
+            self.str_datetime_template_for_rolling
         )
         str_db_folder = os.path.join(
             self.str_path_main_database_dir,
@@ -97,7 +104,13 @@ class class_local_database():
         return str_db_folder
 
     def define_type_of_db_by_name(self, str_db_name):
-        """"""
+        """Define type on database if it name follows given template type_name
+
+        Parameters
+        ----------
+        str_db_name : str
+            Name of asked database
+        """
         str_db_type = str_db_name.split("_")[0]
         return str_db_type
 
@@ -106,6 +119,8 @@ class class_local_database():
 
         Parameters
         ----------
+        str_db_name : str
+            Name of asked database
         """
         str_db_folder = self.get_folder_for_databases()
         str_db_type = self.define_type_of_db_by_name(str_db_name)
@@ -126,7 +141,11 @@ class class_local_database():
         return str_file_path_with_db_file
 
     def get_names_of_files_in_DBs_dir(self):
-        """"""
+        """Get names of files in current directory of DataBase
+
+        Parameters
+        ----------
+        """
         str_db_folder = self.get_folder_for_databases()
         if not os.path.exists(str_db_folder):
             LOGGER.warning(
@@ -181,7 +200,7 @@ class class_local_database():
         return list_names_of_DB_files_cleared
 
     def get_dir_names_of_all_dirs_with_rolling_DBs(self):
-        """Getting names of dir-s with daily results of DB-handler
+        """Getting names of dir-s with rolling results for DataBase
 
         Parameters
         ----------
@@ -205,7 +224,7 @@ class class_local_database():
             try:
                 datetime_obj = datetime.datetime.strptime(
                     str_dir_name,
-                    self.str_datetime_template_rolling
+                    self.str_datetime_template_for_rolling
                 )
                 list_tuples_1_dir_name_2_datetime_obj.append(
                     (str_dir_name, datetime_obj)
@@ -213,7 +232,7 @@ class class_local_database():
             except ValueError:
                 LOGGER.info(
                     "Folder name doesn't satisfy template %s: %s",
-                    self.str_datetime_template_rolling,
+                    self.str_datetime_template_for_rolling,
                     str_dir_name
                 )
         #####
@@ -226,7 +245,7 @@ class class_local_database():
         return list_dir_names_cleared
 
     def get_dict_DBs_data_by_DB_name(self):
-        """Getting dict with data of every database in the folder of DB-handler
+        """Getting dict with data of every database in the dir of DataBase
 
         Parameters
         ----------
@@ -273,7 +292,7 @@ class class_local_database():
         Parameters
         ----------
         str_db_name : str
-            Name of DataBase which value to get
+            Name of DataBase which to use
         value_to_use_if_DB_not_found : object
             value to set if results for some days not found
         """

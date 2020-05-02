@@ -1,22 +1,20 @@
 # Standard library imports
-import os
-import datetime
-from collections import OrderedDict
 import logging
 
 # Third party imports
 
 # Local imports
-from local_simple_database.class_local_database import class_local_database
+from local_simple_database.virtual_class_all_local_databases import \
+    virtual_class_all_local_databases
 from local_simple_database.class_dict_database_handler import \
     class_dict_database_handler
 
 LOGGER = logging.getLogger("local_simple_database")
 
 
-class class_local_dict_database(class_local_database):
+class class_local_dict_database(virtual_class_all_local_databases):
     """
-    This class was built to handle all DataBase-s in one folder
+    This class was built to handle dictionary DataBase-s
 
     ...
 
@@ -24,16 +22,21 @@ class class_local_dict_database(class_local_database):
     ----------
     self.str_path_main_database_dir : str
         Path to main folder with DataBase-s
+    self.str_datetime_template_for_rolling : str
+        Datetime template for folder name if to use rolling
+    self.list_supported_types : list
+        DataBase Types with which this local database can work
+    self.default_value : object
+        Value to use if key in database is not found
     self.dict_db_handler_by_str_db_name : dict
-        {str_db_name_1: handler_to_process_db_data, ...}
+        {database_name: handler ( special object to handle access to one DB)}
     """
 
     def __init__(
             self,
             str_path_database_dir="",
             default_value=None,
-
-            str_datetime_template_rolling=None,
+            str_datetime_template_for_rolling="",
     ):
         """Init DB-s object
 
@@ -41,18 +44,26 @@ class class_local_dict_database(class_local_database):
         ----------
         str_path_database_dir : str, optional
             Path to main folder with DataBase-s (default is ".")
+        default_value : object, optional
+            Value to use if key in database is not found (default is None)
+        str_datetime_template_for_rolling : str
+            Datetime template for folder name if to use rolling
         """
         # Init class of all local DataBases
         super(class_local_dict_database, self).__init__(
             str_path_database_dir=str_path_database_dir,
-            str_datetime_template_rolling=str_datetime_template_rolling,
+            str_datetime_template_for_rolling=str_datetime_template_for_rolling,
         )
         self.list_supported_types = ["dict"]
         self.default_value = default_value
         self.dict_db_handler_by_str_db_name = {}
 
     def init_new_class_obj(self, **kwargs):
-        """"""
+        """Create a new instance of the same class object
+
+        Parameters
+        ----------
+        """
         return class_local_dict_database(**kwargs)
 
     def __getitem__(self, str_db_name):
@@ -61,7 +72,7 @@ class class_local_dict_database(class_local_database):
         Parameters
         ----------
         str_db_name : str
-            Name of DataBase which value to get
+            Name of DataBase which to use
         """
         if str_db_name not in self.dict_db_handler_by_str_db_name:
             self.dict_db_handler_by_str_db_name[str_db_name] = \
@@ -78,7 +89,7 @@ class class_local_dict_database(class_local_database):
         Parameters
         ----------
         str_db_name : str
-            Name of DataBase which value to get
+            Name of DataBase which to use
         dict_values_to_set : dict
             Value to set for DB
         """
@@ -104,7 +115,13 @@ class class_local_dict_database(class_local_database):
         )
 
     def change_default_value(self, new_default_value):
-        """"""
+        """Changing default value to use for all DICT DataBase-s
+
+        Parameters
+        ----------
+        new_default_value : obj
+            Value to use if key in database is not found
+        """
         self.default_value = new_default_value
 
 

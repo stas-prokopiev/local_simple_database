@@ -1,31 +1,27 @@
 # Standard library imports
-import os
-import datetime
-from collections import OrderedDict
 import logging
 import json
 
 # Third party imports
 
 # Local imports
-from local_simple_database.class_local_database import class_local_database
 
 LOGGER = logging.getLogger("local_simple_database")
 
 class class_dict_database_handler():
     """
-    This class was built to handle all DataBase-s in one folder
+    This class was built to handle one DICT DataBase
 
     ...
 
     Attributes
     ----------
-    self.str_path_main_database_dir : str
-        Path to main folder with DataBase-s
-    self.bool_if_to_use_everyday_rolling : bool
-        Flag if to use everyday rolling and save DB-s in folders like 20200101
-    self.dict_db_handler_by_str_db_name : dict
-        {str_db_name_1: handler_to_process_db_data, ...}
+    self.local_dict_database_obj : object of class: class_local_dict_database
+        Handler of all DICT database-s in the folder
+    self.str_db_name : str
+        Name of DataBase which to use
+    self.default_value : object
+        Value to use if key in database is not found
     """
 
     def __init__(
@@ -34,6 +30,17 @@ class class_dict_database_handler():
             str_db_name,
             default_value=None,
     ):
+        """Initialize handler object
+
+        Parameters
+        ----------
+        local_dict_database_obj : object of class: class_local_dict_database
+            Handler of all DICT database-s in the folder
+        str_db_name : str
+            Name of DataBase which to use
+        default_value : object, optional
+            Value to use if key in database is not found (default is None)
+        """
         self.local_dict_database_obj = local_dict_database_obj
         # Check that DB name starts with dict_ otherwise and dict_
         if str_db_name.startswith("dict_"):
@@ -43,16 +50,20 @@ class class_dict_database_handler():
         self.default_value = default_value
 
     def __repr__(self):
-        """"""
-        return self.local_dict_database_obj.read_file_content(self.str_db_name)
-
-    def __getitem__(self, key_to_get):
-        """self[database_name]   method for getting DB current value
+        """Nice representation of object
 
         Parameters
         ----------
-        str_db_name : str
-            Name of DataBase which value to get
+        """
+        return self.local_dict_database_obj.read_file_content(self.str_db_name)
+
+    def __getitem__(self, key_to_get):
+        """dict_database_handler[key_to_get] method for getting value for key
+
+        Parameters
+        ----------
+        key_to_get : str
+            key from DB to get
         """
         dict_current_db_value = self.get_value()
         if key_to_get not in dict_current_db_value:
@@ -66,16 +77,20 @@ class class_dict_database_handler():
         Parameters
         ----------
         key_to_set : obj
-            Name of DataBase which value to get
+            key of database dict for which to set value
         value_to_set : object
-            Value to set for DB
+            Value to set for given key
         """
         dict_current_db_value = self.get_value()
         dict_current_db_value[key_to_set] = value_to_set
         self.set_value(dict_current_db_value)
 
     def get_value(self):
-        """"""
+        """Get current dict value of whole DataBase
+
+        Parameters
+        ----------
+        """
         str_db_content = \
             self.local_dict_database_obj.read_file_content(self.str_db_name)
         if not str_db_content:
@@ -83,14 +98,26 @@ class class_dict_database_handler():
         return json.loads(str_db_content)
 
     def set_value(self, dict_values_to_set):
-        """"""
+        """Setting whole value of DataBase to given dictionary
+
+        Parameters
+        ----------
+        dict_values_to_set : dict
+            Any dictionary
+        """
         self.local_dict_database_obj.save_file_content(
             json.dumps(dict_values_to_set, sort_keys=True, indent=3),
             self.str_db_name
         )
 
     def change_default_value(self, new_default_value):
-        """"""
+        """Change default value for exactly one DataBase
+
+        Parameters
+        ----------
+        new_default_value : object
+            Value to use if key in database is not found
+        """
         self.default_value = new_default_value
 
 
