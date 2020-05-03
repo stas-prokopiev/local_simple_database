@@ -90,7 +90,8 @@ Initialization of databases handler
 
 Arguments:
 
-1. **str_path_database_dir**: If the explicit path to database-s is not given, then will be used path "./local_database"
+1. **str_path_database_dir**: If the explicit path to database-s is not given,
+    then will be used path "./local_database"
     Folder for database-s will be created automatically
 
 A few examples of Usage
@@ -132,7 +133,10 @@ To do so you need to replace str_path_database_dir from the code below on folder
     DB["float_last_price_of_watermelon"] = 7.49
     # Too many watermelons this year, need to apply 30% discount
     DB["float_last_price_of_watermelon"] *= 0.7
-    print("Hello my best customer, current price on watermelon is: ", DB["float_last_price_of_watermelon"])
+    print(
+        "Hello my best customer, current price on watermelon is: ",
+        DB["float_last_price_of_watermelon"]
+    )
 
 
 2) class_local_dict_database
@@ -154,9 +158,11 @@ Initialization of databases handler
 
 Arguments:
 
-1. **str_path_database_dir**: If the explicit path to database-s is not given, then will be used path "./local_database"
+#. **str_path_database_dir**: If the explicit path to database-s is not given,
+    then will be used path "./local_database"
     Folder for database-s will be created automatically
-2. **default_value**: value to use if key in DB not found.
+
+#. **default_value**: value to use if key in DB not found.
 
 A few examples of Usage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -268,7 +274,7 @@ Both 2 main classes (**class_local_simple_database**, **class_local_dict_databas
         float_max_seconds_per_file_operation=0.05,
         str_datetime_template_for_rolling=""
     )
-    
+
 
 2) Get values in ALL databases in the directory.
 --------------------------------------------------------------------------------------------------
@@ -298,7 +304,7 @@ If you were using rolling, and interested only in one database. {"datetime_1": d
 Links
 =====
 
-    * `Pypi <https://pypi.org/project/local_simple_database/>`_
+    * `PYPI <https://pypi.org/project/local_simple_database/>`_
     * `GitHub <https://github.com/stas-prokopiev/local_simple_database>`_
 
 Releases
