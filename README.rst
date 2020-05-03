@@ -9,14 +9,14 @@ Short Overview.
 =========================
 
 local_simple_database is a simple Python package(**py>=2.7 or py>=3.4**) with the main purpose to
-help storing and retrieving data from human readable txt files in just with one line of code as
-if it were usual python variables. All of this done in process-thread safe manner.
+help storing and retrieving data from human-readable txt files in just with one line of code. All of this is done in a process-thread safe manner.
 
 
 Long Overview.
 =========================
 
-This package consists of 2 main classes with which user should interact
+This package consists of 2 main classes with which user should interact:
+
 #. class_local_simple_database
 #. class_local_dict_database
 
@@ -25,14 +25,14 @@ One small example
 
 Let's say you want to want store file with int variable with name int_times_I_ve_eaten.
 
-Then you should define handler of databases (E.G. at the top of you python of program)
+Then you should define handler of databases (E.G. at the top of your python program)
 
 .. code-block:: python
 
     from local_simple_database import class_local_simple_database
     DB = class_local_simple_database("folder_with_all_my_databases")
 
-and then just use everywhere in you code DB["int_times_I_ve_eaten"] like as it was usual dict.
+and then just use everywhere in your code DB["int_times_I_ve_eaten"] like as it was usual dictionary.
 
 .. code-block:: python
 
@@ -41,7 +41,7 @@ and then just use everywhere in you code DB["int_times_I_ve_eaten"] like as it w
 
 After running this code in the folder with path = "folder_with_all_my_databases" will be created file "folder_with_all_my_databases/int_times_I_ve_eaten.txt" where value of this database will be stored.
 
-As value is stored in human readable txt file you can always access it and even after restart of computer it'll still be there.
+As value is stored in a human-readable txt file you can always access it and even after a restart of the computer, it'll still be there.
 
 To get it, just use:
 
@@ -55,7 +55,7 @@ How to name database-s
 
 Name of database should satisfy template "type_name" (E.G. int_balls, float_seconds_left, str_my_name, dict_useless_heap)
 
-So just by name you can define the type of database, isn't it awesome.
+So just by the name you can define the type of database, isn't it awesome.
 
 Installation
 ============
@@ -67,17 +67,17 @@ Installation
     pip install local_simple_database
 
 
-Diving deeper.
+Basic usage.
 =========================
 
 1) class_local_simple_database
 --------------------------------------------------------------------------------------------------
 
-This class was built to handle (saving-retrieving) one value simple data like integer or float.
+This class was built to handle (saving-retrieving) one value data like integers or floats.
 
 For now on supported types of databases are: ["int", "float", "str"] (Probably will be enhanced soon)
 
-- This mean that you can use database with one value inside with types of value: integer, float, string
+- This means that you can use a database with one value inside with types of value: integer, float, string
 
 Initialization of databases handler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -90,15 +90,15 @@ Initialization of databases handler
 
 Arguments:
 
-1. **str_path_database_dir**: If explicit path to database-s is not given, then will be used path "./local_database"
+1. **str_path_database_dir**: If the explicit path to database-s is not given, then will be used path "./local_database"
     Folder for database-s will be created automatically
 
 A few examples of Usage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The first thing you need to do is to initialize database in some directory.
+The first thing you need to do is to initialize the database in some directory.
 
-To do so you need to replace str_path_database_dir from the code below on folder where you would like to store file or leave it blank.
+To do so you need to replace str_path_database_dir from the code below on folder where you would like to store the file or leave it blank.
 
 .. code-block:: python
 
@@ -138,37 +138,40 @@ To do so you need to replace str_path_database_dir from the code below on folder
 2) class_local_dict_database
 --------------------------------------------------------------------------------------------------
 
-This class was built to handle (saving-retrieving) dictionary of data from file.
+This class was built to handle (saving-retrieving) dictionary of data from a file.
 
-Work with such database-s is a little different from *class_local_simple_database* so it was necessary to put it in separate class
+Work with such database-s is a little different from *class_local_simple_database* so it was necessary to put it in a separate class
 
 Initialization of databases handler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-    DB = class_local_simple_database(
+    DB = class_local_dict_database(
         str_path_database_dir=".",
         default_value=None,
     )
 
 Arguments:
 
-1. **str_path_database_dir**: If explicit path to database-s is not given, then will be used path "./local_database"
+1. **str_path_database_dir**: If the explicit path to database-s is not given, then will be used path "./local_database"
     Folder for database-s will be created automatically
 2. **default_value**: value to use if key in DB not found.
 
 A few examples of Usage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The first thing you need to do is to initialize database in some directory.
+The first thing you need to do is to initialize the database in some directory.
 
-To do so you need to replace str_path_database_dir from the code below on folder where you would like to store file or leave it blank.
+To do so you need to replace str_path_database_dir from the code below on folder where you would like to store a file or leave it blank.
 
 .. code-block:: python
 
     from local_simple_database import class_local_simple_database
-    DB = class_local_simple_database(str_path_database_dir=".")
+    DB = class_local_dict_database(
+        str_path_database_dir=".",
+        default_value=None,
+    )
 
 
 1) Basic Save-Get data from dict database.
@@ -203,7 +206,7 @@ To do so you need to replace str_path_database_dir from the code below on folder
 
 .. code-block:: python
 
-    # You can set default value for all databases OR for only one
+    # You can set the default value for all databases OR for only one
 
     ## 1) Set default value for all database-s:
     DB.change_default_value(0)
@@ -225,35 +228,52 @@ Advanced usage.
 1) class database additional arguments
 --------------------------------------------------------------------------------------------------
 
-Both 2 main classes (**class_local_simple_database**, **class_local_dict_database**) have additional arguments.
+Both 2 main classes (**class_local_simple_database**, **class_local_dict_database**) have additional arguments:
 
-float_max_seconds_per_file_operation=0.05
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-This variable necessary for multiprocessing safe work.
+1) **float_max_seconds_per_file_operation=0.05**
 
-It set time in which accessed by process file can't be accessed by any other process.
-By default it set to 50 ms.
+    This variable is necessary for multiprocessing safe work.
 
-If your operation from accessing value till setting new value need more time, you are more than welcome to increase this value.
+    It set time in which access by process file can't be accessed by any other process.
+    By default, it set to 50 ms.
 
-You can set it to 0.0 if you are not using threads-processes.
+    If you use operation which from accessing value till setting new value needs more time, you are more than welcome to increase it.
 
-str_datetime_template_for_rolling=""
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+    You can set it to 0.0 if you are not using threads-processes and want the maximum speed.
 
-This variable allow to set rolling save of database results using datetime template.
+2) **str_datetime_template_for_rolling=""**
 
-If value is not empty, then saving/retrieving results will be done from deeper folders with names satisfy datetime evaluation of string given.
 
-E.G. To save daily results use "%Y%m%d" (Then deeper folder names will be like "20191230", "20191231", ...)
+    This variable allows setting rolling save of database results using the DateTime template.
 
-E.G. To save hourly results use "%Y%m%d_%H" (Then deeper folder names will be like "20191230_0", "20191230_23", ...)
+    If the value is not empty, then saving/retrieving results will be done from deeper folders with names satisfy the evaluation of the DateTime string template.
 
+    E.G. To save daily results use "%Y%m%d" (Then deeper folder names will be like "20191230", "20191231", ...)
+
+    E.G. To save hourly results use "%Y%m%d_%H" (Then deeper folder names will be like "20191230_0", "20191230_23", ...)
+
+
+.. code-block:: python
+
+    # Full definition of class_local_simple_database
+    DB = class_local_simple_database(
+        str_path_database_dir=".",
+        float_max_seconds_per_file_operation=0.05,
+        str_datetime_template_for_rolling=""
+    )
+    # Full definition of class_local_dict_database
+    DB = class_local_dict_database(
+        str_path_database_dir=".",
+        default_value=None,
+        float_max_seconds_per_file_operation=0.05,
+        str_datetime_template_for_rolling=""
+    )
+    
 
 2) Get values in ALL databases in the directory.
 --------------------------------------------------------------------------------------------------
 
-To get dictionary with data in all databases by database name, use:
+To get a dictionary with data in all databases by database name, use:
 
 .. code-block:: python
 
@@ -269,12 +289,11 @@ If you were using rolling, then you can get dictionary with results like {"datet
 If you were using rolling, and interested only in one database. {"datetime_1": database_value_1, ...}
 
 .. code-block:: python
+
     DB.get_one_DB_data_daily(
         str_db_name,
         value_to_use_if_DB_not_found=None
     )
-
-
 
 Links
 =====
