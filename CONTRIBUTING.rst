@@ -1,6 +1,8 @@
 ============
-Authors
+Contributing
 ============
+
+Please feel free to write directly to me.
 
 * Stanislav Prokopyev <stas.prokopiev@gmail.com>
 
