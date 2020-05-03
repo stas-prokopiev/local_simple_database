@@ -18,14 +18,21 @@ class class_local_dict_database(virtual_class_all_local_databases):
 
     ...
 
-    Attributes
-    ----------
+    Parent Attributes
+    -----------------
     self.str_path_main_database_dir : str
         Path to main folder with DataBase-s
     self.str_datetime_template_for_rolling : str
         Datetime template for folder name if to use rolling
     self.list_supported_types : list
         DataBase Types with which this local database can work
+    self.dict_file_lock_by_fila_path : dict
+        {file_path_1: FileLock object, ...}
+    self.float_max_seconds_per_file_operation : float
+        Seconds per file operation, need it for multiprocessing safety
+
+    Attributes
+    ----------
     self.default_value : object
         Value to use if key in database is not found
     self.dict_db_handler_by_str_db_name : dict
@@ -34,7 +41,8 @@ class class_local_dict_database(virtual_class_all_local_databases):
 
     def __init__(
             self,
-            str_path_database_dir="",
+            str_path_database_dir=".",
+            float_max_seconds_per_file_operation=0.005,
             default_value=None,
             str_datetime_template_for_rolling="",
     ):
@@ -44,6 +52,8 @@ class class_local_dict_database(virtual_class_all_local_databases):
         ----------
         str_path_database_dir : str, optional
             Path to main folder with DataBase-s (default is ".")
+        float_max_seconds_per_file_operation : float
+            Seconds per file operation, need it for multiprocessing safety
         default_value : object, optional
             Value to use if key in database is not found (default is None)
         str_datetime_template_for_rolling : str
@@ -52,7 +62,10 @@ class class_local_dict_database(virtual_class_all_local_databases):
         # Init class of all local DataBases
         super(class_local_dict_database, self).__init__(
             str_path_database_dir=str_path_database_dir,
-            str_datetime_template_for_rolling=str_datetime_template_for_rolling,
+            float_max_seconds_per_file_operation=\
+                float_max_seconds_per_file_operation,
+            str_datetime_template_for_rolling=\
+                str_datetime_template_for_rolling,
         )
         self.list_supported_types = ["dict"]
         self.default_value = default_value

@@ -1,6 +1,7 @@
 # Standard library imports
 import os
 import datetime
+from time import sleep
 from collections import OrderedDict
 import logging
 
@@ -26,11 +27,16 @@ class virtual_class_all_local_databases():
         Datetime template for folder name if to use rolling
     self.list_supported_types : list
         DataBase Types with which this local database can work
+    self.dict_file_lock_by_fila_path : dict
+        {file_path_1: FileLock object, ...}
+    self.float_max_seconds_per_file_operation : float
+        Seconds per file operation, need it for multiprocessing safety
     """
 
     def __init__(
             self,
-            str_path_database_dir="",
+            str_path_database_dir=".",
+            float_max_seconds_per_file_operation=0.005,
             str_datetime_template_for_rolling="",
     ):
         """Init common stuff for all DB-s object
@@ -39,22 +45,33 @@ class virtual_class_all_local_databases():
         ----------
         str_path_database_dir : str, optional
             Path to main folder with DataBase-s (default is ".")
+        float_max_seconds_per_file_operation : float
+            Seconds per file operation, need it for multiprocessing safety
         str_datetime_template_for_rolling : str
             Datetime template for folder name if to use rolling
         """
-        if not str_path_database_dir:
-            str_path_database_dir = "local_database"
+        if not str_path_database_dir or str_path_database_dir == ".":
+            str_path_database_dir = "local_simple_database"
+        self.float_max_seconds_per_file_operation = \
+            float_max_seconds_per_file_operation
         self.str_path_main_database_dir = \
             os.path.abspath(str_path_database_dir)
+        LOGGER.debug(
+            "Main dir for Databases Initialized: %s",
+            self.str_path_main_database_dir
+        )
+
         # If dir with database doesn't exists, then create it
         if (not os.path.isdir(self.str_path_main_database_dir)):
             os.makedirs(self.str_path_main_database_dir)
         #####
-        self.str_datetime_template_for_rolling = str_datetime_template_for_rolling
+        self.str_datetime_template_for_rolling = \
+            str_datetime_template_for_rolling
+        self.dict_file_lock_by_fila_path = {}
         self.list_supported_types = []
 
     def read_file_content(self, str_db_name):
-        """Read whole content of file with DataBase
+        """Read whole content of file with DataBase in multiprocess safe way
 
         Parameters
         ----------
@@ -64,13 +81,29 @@ class virtual_class_all_local_databases():
         str_db_file = self.get_file_path_with_db_file(str_db_name)
         if not os.path.exists(str_db_file):
             return ""
-        with FileLock(str_db_file + ".lock", timeout=30):
-            with open(str_db_file, 'r', encoding="utf8", errors='ignore') as f:
-                str_whole_file = f.read()
-            return str_whole_file
+        #####
+        # If necessary then Acquire file LOCK
+        if self.float_max_seconds_per_file_operation > 0:
+            if str_db_file not in self.dict_file_lock_by_fila_path:
+                self.dict_file_lock_by_fila_path[str_db_file] = \
+                    FileLock(str_db_file + ".lock", timeout=1)
+            lock = self.dict_file_lock_by_fila_path[str_db_file]
+            try:
+                lock.acquire(
+                    timeout=self.float_max_seconds_per_file_operation,
+                    poll_intervall=self.float_max_seconds_per_file_operation / 10.0
+                )
+            except TimeoutError:
+                LOGGER.debug("Timeout except occurred for filelock")
+                sleep(self.float_max_seconds_per_file_operation)
+        #####
+        # Read from file
+        with open(str_db_file, 'r', encoding="utf8", errors='ignore') as f:
+            str_whole_file = f.read()
+        return str_whole_file
 
     def save_file_content(self, str_content, str_db_name):
-        """Save content to file with DataBase
+        """Save content to file with DataBase in multiprocess safe way
 
         Parameters
         ----------
@@ -80,9 +113,33 @@ class virtual_class_all_local_databases():
             Name of asked database
         """
         str_db_file = self.get_file_path_with_db_file(str_db_name)
-        with FileLock(str_db_file + ".lock", timeout=30):
-            with open(str_db_file, "w", encoding="utf8", errors='ignore') as f:
-                f.write(str_content)
+        #####
+        # If necessary then Acquire file LOCK
+        if self.float_max_seconds_per_file_operation > 0:
+            if str_db_file not in self.dict_file_lock_by_fila_path:
+                self.dict_file_lock_by_fila_path[str_db_file] = \
+                    FileLock(str_db_file + ".lock", timeout=1)
+            lock = self.dict_file_lock_by_fila_path[str_db_file]
+            # If lock is already acquired no need to do it once again
+            if not lock.is_locked:
+                try:
+                    lock.acquire(
+                        timeout=self.float_max_seconds_per_file_operation,
+                        poll_intervall=\
+                            self.float_max_seconds_per_file_operation / 10.0
+                    )
+                except TimeoutError:
+                    LOGGER.debug("Timeout except occurred for filelock")
+                    sleep(self.float_max_seconds_per_file_operation)
+        #####
+        # WRITE to file
+        with open(str_db_file, "w", encoding="utf8", errors='ignore') as f:
+            f.write(str_content)
+        #####
+        # Release filelock if necessary
+        if self.float_max_seconds_per_file_operation > 0:
+            lock.release(force=True)
+            sleep(self.float_max_seconds_per_file_operation)
 
     def get_folder_for_databases(self):
         """Getting folder where should be file with database

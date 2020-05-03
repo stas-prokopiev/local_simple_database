@@ -15,14 +15,21 @@ class class_local_simple_database(virtual_class_all_local_databases):
 
     ...
 
-    Attributes
-    ----------
+    Parent Attributes
+    -----------------
     self.str_path_main_database_dir : str
         Path to main folder with DataBase-s
     self.str_datetime_template_for_rolling : str
         Datetime template for folder name if to use rolling
     self.list_supported_types : list
         DataBase Types with which this local database can work
+    self.dict_file_lock_by_fila_path : dict
+        {file_path_1: FileLock object, ...}
+    self.float_max_seconds_per_file_operation : float
+        Seconds per file operation, need it for multiprocessing safety
+
+    Attributes
+    ----------
     self.dict_str_db_type_by_str_db_name : dict
         {database_1_name: str_value_type, ...}
     self.dict_list_db_allowed_types_by_str_db_name : dict
@@ -35,7 +42,8 @@ class class_local_simple_database(virtual_class_all_local_databases):
 
     def __init__(
             self,
-            str_path_database_dir="",
+            str_path_database_dir=".",
+            float_max_seconds_per_file_operation=0.005,
             str_datetime_template_for_rolling="",
     ):
         """Init DB-s object
@@ -44,13 +52,18 @@ class class_local_simple_database(virtual_class_all_local_databases):
         ----------
         str_path_database_dir : str, optional
             Path to main folder with DataBase-s (default is ".")
+        float_max_seconds_per_file_operation : float
+            Seconds per file operation, need it for multiprocessing safety
         str_datetime_template_for_rolling : str
             Datetime template for folder name if to use rolling
         """
         # Init class of all local DataBases
         super(class_local_simple_database, self).__init__(
             str_path_database_dir=str_path_database_dir,
-            str_datetime_template_for_rolling=str_datetime_template_for_rolling,
+            float_max_seconds_per_file_operation=\
+                float_max_seconds_per_file_operation,
+            str_datetime_template_for_rolling=\
+                str_datetime_template_for_rolling,
         )
         self.list_supported_types = ["int", "float", "str"]
         self.dict_func_db_getter_by_str_db_name = {}
