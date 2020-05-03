@@ -2,8 +2,11 @@
 LOCAL_SIMPLE_DATABASE
 ========================
 
-.. contents:: **Table of Contents**
+.. image:: https://readthedocs.org/projects/local-simple-database/badge/?version=latest
+:target: https://local-simple-database.readthedocs.io/en/latest/?badge=latest
+:alt: Documentation Status
 
+.. contents:: **Table of Contents**
 
 Short Overview.
 =========================
@@ -305,6 +308,7 @@ Links
 =====
 
     * `PYPI <https://pypi.org/project/local_simple_database/>`_
+    * `readthedocs <https://local-simple-database.readthedocs.io/en/latest/>`_
     * `GitHub <https://github.com/stas-prokopiev/local_simple_database>`_
 
 Releases

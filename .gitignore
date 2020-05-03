@@ -1,5 +1,6 @@
 # My files I want to hide
 JUPYTER_NOTEBOOKS/*
+jupyter_notebooks/*
 
 # Temporary and binary files
 *~
