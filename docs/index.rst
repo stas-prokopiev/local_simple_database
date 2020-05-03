@@ -2,7 +2,10 @@
 local_simple_database
 =====================
 
-This is the documentation of **local_simple_database**.
+.. toctree::
+   :maxdepth: 1
+
+   README <README>
 
 Contents
 ========
