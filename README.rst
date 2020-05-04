@@ -6,8 +6,8 @@ LOCAL_SIMPLE_DATABASE
     :target: https://local-simple-database.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
-.. image:: https://travis-ci.org/stas-prokopiev/code_searcher.svg?branch=master
-    :target: https://travis-ci.org/stas-prokopiev/code_searcher
+.. image:: https://travis-ci.org/stas-prokopiev/local_simple_database.svg?branch=master
+    :target: https://travis-ci.org/stas-prokopiev/local_simple_database
 
 .. contents:: **Table of Contents**
 
