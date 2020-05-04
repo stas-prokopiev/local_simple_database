@@ -58,9 +58,6 @@ class class_local_simple_database(virtual_class_all_local_databases):
             Datetime template for folder name if to use rolling
         """
         # Init class of all local DataBases
-
-
-
         super(class_local_simple_database, self).__init__(
             str_path_database_dir=str_path_database_dir,
             float_max_seconds_per_file_operation=\
@@ -68,9 +65,6 @@ class class_local_simple_database(virtual_class_all_local_databases):
             str_datetime_template_for_rolling=\
                 str_datetime_template_for_rolling,
         )
-
-
-        
         self.list_supported_types = ["int", "float", "str"]
         self.dict_func_db_getter_by_str_db_name = {}
         self.dict_func_db_setter_by_str_db_name = {}

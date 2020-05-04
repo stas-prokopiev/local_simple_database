@@ -1,5 +1,6 @@
 # Standard library imports
 import os
+import sys
 import datetime
 from time import sleep
 from collections import OrderedDict
@@ -98,7 +99,7 @@ class virtual_class_all_local_databases(object):
                 sleep(self.float_max_seconds_per_file_operation)
         #####
         # Read from file
-        with open(str_db_file, 'r', encoding="utf8", errors='ignore') as f:
+        with open(str_db_file, 'r') as f:
             str_whole_file = f.read()
         return str_whole_file
 
@@ -133,7 +134,7 @@ class virtual_class_all_local_databases(object):
                     sleep(self.float_max_seconds_per_file_operation)
         #####
         # WRITE to file
-        with open(str_db_file, "w", encoding="utf8", errors='ignore') as f:
+        with open(str_db_file, "w") as f:
             f.write(str_content)
         #####
         # Release filelock if necessary
