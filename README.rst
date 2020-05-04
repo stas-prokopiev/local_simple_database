@@ -9,6 +9,8 @@ LOCAL_SIMPLE_DATABASE
 .. image:: https://travis-ci.org/stas-prokopiev/local_simple_database.svg?branch=master
     :target: https://travis-ci.org/stas-prokopiev/local_simple_database
 
+
+
 .. contents:: **Table of Contents**
 
 Short Overview.
