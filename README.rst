@@ -3,24 +3,27 @@ LOCAL_SIMPLE_DATABASE
 ========================
 
 .. image:: https://img.shields.io/github/last-commit/stas-prokopiev/local_simple_database
+   :target: https://img.shields.io/github/last-commit/stas-prokopiev/local_simple_database
    :alt: GitHub last commit
-
+   
 .. image:: https://img.shields.io/github/license/stas-prokopiev/local_simple_database
     :target: https://github.com/stas-prokopiev/local_simple_database/blob/master/LICENSE.txt
-    :alt: GitHub license
-
+    :alt: GitHub license<space><space>
+    
 .. image:: https://readthedocs.org/projects/local-simple-database/badge/?version=latest
     :target: https://local-simple-database.readthedocs.io/en/latest/?badge=latest
-    :alt: Documentation Status
-
+    :alt: Documentation Status  
+    
 .. image:: https://travis-ci.org/stas-prokopiev/local_simple_database.svg?branch=master
     :target: https://travis-ci.org/stas-prokopiev/local_simple_database
-
+    
 .. image:: https://img.shields.io/pypi/v/local_simple_database
-    :alt: PyPI
-
+   :target: https://img.shields.io/pypi/v/local_simple_database
+   :alt: PyPI  
+    
 .. image:: https://img.shields.io/pypi/pyversions/local_simple_database
-    :alt: PyPI - Python Version
+   :target: https://img.shields.io/pypi/pyversions/local_simple_database
+   :alt: PyPI - Python Version
 
 
 .. contents:: **Table of Contents**
