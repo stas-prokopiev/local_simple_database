@@ -4,6 +4,7 @@ jupyter_notebooks/*
 local_simple_database/*
 tests/tmp_database/*
 tox.ini
+.vscode/*
 
 # Temporary and binary files
 *~
