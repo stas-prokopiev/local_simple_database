@@ -28,7 +28,6 @@ class class_dict_database_handler():
             self,
             local_dict_database_obj,
             str_db_name,
-            default_value=None,
     ):
         """Initialize handler object
 
@@ -38,16 +37,17 @@ class class_dict_database_handler():
             Handler of all DICT database-s in the folder
         str_db_name : str
             Name of DataBase which to use
-        default_value : object, optional
-            Value to use if key in database is not found (default is None)
         """
         self.local_dict_database_obj = local_dict_database_obj
-        # Check that DB name starts with dict_ otherwise and dict_
-        if str_db_name.startswith("dict_"):
-            self.str_db_name = str_db_name
-        else:
-            self.str_db_name = "dict_" + str_db_name
-        self.default_value = default_value
+        # Check that DB name starts with dict_
+
+        assert str_db_name.startswith("dict_"), (
+            "ERROR: dict DB name should starts with dict_ current name is: " +
+             str_db_name
+        )
+
+        self.str_db_name = str_db_name
+        self.default_value = local_dict_database_obj.default_value
 
     def __repr__(self):
         """Nice representation of object
@@ -105,8 +105,12 @@ class class_dict_database_handler():
         dict_values_to_set : dict
             Any dictionary
         """
+        assert isinstance(dict_values_to_set, dict), (
+            "ERROR: Trying to set for dict database another type: " +
+            str(type(dict_values_to_set))
+        )
         self.local_dict_database_obj.save_file_content(
-            json.dumps(dict_values_to_set, sort_keys=True, indent=3),
+            json.dumps(dict_values_to_set, indent=3),
             self.str_db_name
         )
 

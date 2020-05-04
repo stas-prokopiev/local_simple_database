@@ -27,7 +27,7 @@ class virtual_class_all_local_databases():
         Datetime template for folder name if to use rolling
     self.list_supported_types : list
         DataBase Types with which this local database can work
-    self.dict_file_lock_by_fila_path : dict
+    self.dict_file_lock_by_file_path : dict
         {file_path_1: FileLock object, ...}
     self.float_max_seconds_per_file_operation : float
         Seconds per file operation, need it for multiprocessing safety
@@ -36,7 +36,7 @@ class virtual_class_all_local_databases():
     def __init__(
             self,
             str_path_database_dir=".",
-            float_max_seconds_per_file_operation=0.005,
+            float_max_seconds_per_file_operation=0.01,
             str_datetime_template_for_rolling="",
     ):
         """Init common stuff for all DB-s object
@@ -67,7 +67,7 @@ class virtual_class_all_local_databases():
         #####
         self.str_datetime_template_for_rolling = \
             str_datetime_template_for_rolling
-        self.dict_file_lock_by_fila_path = {}
+        self.dict_file_lock_by_file_path = {}
         self.list_supported_types = []
 
     def read_file_content(self, str_db_name):
@@ -84,10 +84,10 @@ class virtual_class_all_local_databases():
         #####
         # If necessary then Acquire file LOCK
         if self.float_max_seconds_per_file_operation > 0:
-            if str_db_file not in self.dict_file_lock_by_fila_path:
-                self.dict_file_lock_by_fila_path[str_db_file] = \
+            if str_db_file not in self.dict_file_lock_by_file_path:
+                self.dict_file_lock_by_file_path[str_db_file] = \
                     FileLock(str_db_file + ".lock", timeout=1)
-            lock = self.dict_file_lock_by_fila_path[str_db_file]
+            lock = self.dict_file_lock_by_file_path[str_db_file]
             try:
                 lock.acquire(
                     timeout=self.float_max_seconds_per_file_operation,
@@ -116,10 +116,10 @@ class virtual_class_all_local_databases():
         #####
         # If necessary then Acquire file LOCK
         if self.float_max_seconds_per_file_operation > 0:
-            if str_db_file not in self.dict_file_lock_by_fila_path:
-                self.dict_file_lock_by_fila_path[str_db_file] = \
+            if str_db_file not in self.dict_file_lock_by_file_path:
+                self.dict_file_lock_by_file_path[str_db_file] = \
                     FileLock(str_db_file + ".lock", timeout=1)
-            lock = self.dict_file_lock_by_fila_path[str_db_file]
+            lock = self.dict_file_lock_by_file_path[str_db_file]
             # If lock is already acquired no need to do it once again
             if not lock.is_locked:
                 try:

@@ -42,7 +42,7 @@ class class_local_dict_database(virtual_class_all_local_databases):
     def __init__(
             self,
             str_path_database_dir=".",
-            float_max_seconds_per_file_operation=0.005,
+            float_max_seconds_per_file_operation=0.01,
             default_value=None,
             str_datetime_template_for_rolling="",
     ):
@@ -91,8 +91,7 @@ class class_local_dict_database(virtual_class_all_local_databases):
             self.dict_db_handler_by_str_db_name[str_db_name] = \
                 class_dict_database_handler(
                     self,
-                    str_db_name,
-                    default_value=self.default_value
+                    str_db_name
                 )
         return self.dict_db_handler_by_str_db_name[str_db_name]
 
@@ -115,8 +114,7 @@ class class_local_dict_database(virtual_class_all_local_databases):
             self.dict_db_handler_by_str_db_name[str_db_name] = \
                 class_dict_database_handler(
                     self,
-                    str_db_name,
-                    default_value=self.default_value
+                    str_db_name
                 )
         self.dict_db_handler_by_str_db_name[str_db_name].set_value(
             dict_values_to_set
@@ -136,5 +134,8 @@ class class_local_dict_database(virtual_class_all_local_databases):
             Value to use if key in database is not found
         """
         self.default_value = new_default_value
+        for str_db_name in self.dict_db_handler_by_str_db_name:
+            db_handler = self.dict_db_handler_by_str_db_name[str_db_name]
+            db_handler.change_default_value(new_default_value)
 
 

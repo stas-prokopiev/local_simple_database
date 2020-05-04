@@ -1,6 +1,9 @@
 # My files I want to hide
 JUPYTER_NOTEBOOKS/*
 jupyter_notebooks/*
+local_simple_database/*
+tests/tmp_database/*
+tox.ini
 
 # Temporary and binary files
 *~

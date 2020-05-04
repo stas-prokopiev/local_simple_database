@@ -244,7 +244,7 @@ Both 2 main classes (**class_local_simple_database**, **class_local_dict_databas
     This variable is necessary for multiprocessing safe work.
 
     It set time in which access by process file can't be accessed by any other process.
-    By default, it set to 50 ms.
+    By default, it set to 10 ms.
 
     If you use operation which from accessing value till setting new value needs more time, you are more than welcome to increase it.
 

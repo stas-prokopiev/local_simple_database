@@ -43,7 +43,7 @@ class class_local_simple_database(virtual_class_all_local_databases):
     def __init__(
             self,
             str_path_database_dir=".",
-            float_max_seconds_per_file_operation=0.005,
+            float_max_seconds_per_file_operation=0.01,
             str_datetime_template_for_rolling="",
     ):
         """Init DB-s object
@@ -140,9 +140,10 @@ class class_local_simple_database(virtual_class_all_local_databases):
         assert str_db_name, "ERROR: Database name should not be empty"
         #####
         # If DB already initialized then finish execution
-        if str_db_name in self.dict_str_db_type_by_str_db_name:
-            LOGGER.debug("DB %s already was initialized", str_db_name)
-            return None
+        assert str_db_name not in self.dict_str_db_type_by_str_db_name,\
+            "ERROR: DB {} is not defined, but shouldn't be so.".format(
+                str_db_name
+            )
         #####
         # Check that name of DataBase is correct
         LOGGER.debug("Try to init new DB: %s", str_db_name)
@@ -176,15 +177,6 @@ class class_local_simple_database(virtual_class_all_local_databases):
             self.dict_func_db_setter_by_str_db_name[str_db_name] = \
                 lambda value_to_set: "%d" % value_to_set
         #####
-        # str
-        elif str_db_type == "str":
-            self.dict_list_db_allowed_types_by_str_db_name[str_db_name] = \
-                [str]
-            self.dict_func_db_getter_by_str_db_name[str_db_name] = \
-                lambda str_file_content: str(str_file_content)
-            self.dict_func_db_setter_by_str_db_name[str_db_name] = \
-                lambda value_to_set: str(value_to_set)
-        #####
         # float
         elif str_db_type == "float":
             self.dict_list_db_allowed_types_by_str_db_name[str_db_name] = \
@@ -196,4 +188,14 @@ class class_local_simple_database(virtual_class_all_local_databases):
             self.dict_func_db_getter_by_str_db_name[str_db_name] = getter
             self.dict_func_db_setter_by_str_db_name[str_db_name] = \
                 lambda value_to_set: "%d" % value_to_set
+        #####
+        # str
+        elif str_db_type == "str":
+            self.dict_list_db_allowed_types_by_str_db_name[str_db_name] = \
+                [str]
+            self.dict_func_db_getter_by_str_db_name[str_db_name] = \
+                lambda str_file_content: str(str_file_content)
+            self.dict_func_db_setter_by_str_db_name[str_db_name] = \
+                lambda value_to_set: str(value_to_set)
+
 
