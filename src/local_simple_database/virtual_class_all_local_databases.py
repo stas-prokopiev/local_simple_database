@@ -13,7 +13,7 @@ from filelock import FileLock
 LOGGER = logging.getLogger("local_simple_database")
 
 
-class virtual_class_all_local_databases():
+class virtual_class_all_local_databases(object):
     """
     This is virtual class to handle all needs for all child DataBases
 
