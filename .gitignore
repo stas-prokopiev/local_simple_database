@@ -5,6 +5,8 @@ local_simple_database/*
 tests/tmp_database/*
 tox.ini
 .vscode/*
+make.bat
+Makefile
 
 # Temporary and binary files
 *~
@@ -51,6 +53,7 @@ sdist/*
 docs/api/*
 docs/_rst/*
 docs/_build/*
+source/*
 cover/*
 MANIFEST
 

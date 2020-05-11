@@ -31,7 +31,8 @@ LOCAL_SIMPLE_DATABASE
 Short Overview.
 =========================
 
-local_simple_database is a simple Python package(**py>=2.7 or py>=3.4**) with the main purpose to
+local_simple_database is a simple Python package(**py>=2.7 or py>=3.4**)
+with the main purpose to
 help storing and retrieving data from human-readable txt files with one line of code.
 All the interactions with files are being made in a process-thread safe manner.
 
@@ -64,9 +65,9 @@ and then just use everywhere in your code **DB["int_times_I_ve_eaten"]** like if
 
 After running this code in the folder with path = *"./folder_with_all_my_databases"*
 
-will be created file *"./folder_with_all_my_databases/int_times_I_ve_eaten.txt"* with value.
+will be created file *"int_times_I_ve_eaten.txt"* with value.
 
-Value is stored in a human-readable txt file, so you can always access it.
+Value is stored in a human-readable .txt file, so you can always access it.
 
 To get it some time later, just use:
 
@@ -100,9 +101,9 @@ Basic usage.
 1) class_local_simple_database
 --------------------------------------------------------------------------------------------------
 
-This class was built to handle (saving-retrieving) one value data like integers or floats.
+This class is built to handle (saving-retrieving) one value data like integer or float.
 
-For now on supported types of databases are: ["int", "float", "str"] (Probably will be enhanced soon)
+For now supported types of databases are: ["int", "float", "str"] (Probably will be enhanced soon)
 
 - This means that you can use a database with one value inside with types: integer, float, string
 
@@ -130,7 +131,7 @@ After you've initialized DB variable you can use:
 1) Integer database
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-*If you want to store/access/modify simple int in file*
+*If you want to store/access/modify simple int in file:*
 
 .. code-block:: python
 
@@ -165,13 +166,14 @@ After you've initialized DB variable you can use:
 
 This class was built to handle (saving-retrieving) dictionary with data from a file.
 
-Work with such database-s is a little different from **class_local_simple_database** so it was necessary to put it in a separate class
+Work with such database is a little different from **class_local_simple_database** so it was necessary to put it in a separate class
 
 Initialization of databases handler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
+    from local_simple_database import class_local_simple_database
     DB = class_local_dict_database(
         str_path_database_dir=".",
         default_value=None,
@@ -187,18 +189,7 @@ Arguments:
 A few examples of Usage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Initialization of DB obj.
-
-.. code-block:: python
-
-    from local_simple_database import class_local_simple_database
-    DB = class_local_dict_database(
-        str_path_database_dir=".",
-        default_value=None,
-    )
-
-
-1) Basic Save-Get data from dict database.
+1) Basic store/access/modify data from a dict database.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 .. code-block:: python
@@ -207,7 +198,7 @@ Initialization of DB obj.
     # Set value for whole DB:
     DB["dict_very_useful_heap"] = {"Mike": 50, "Stan": 1000000}
 
-    ## Set keys for one DB with dict
+    ## Set keys for one dictionary DB
     DB["dict_useless_heap"]["random_key"] = 1
     DB["dict_useless_heap"]["random_key"] += 3
     DB["dict_useless_heap"][2] = ["Oh my God, what a list is doing here", "Aaa"]
@@ -218,7 +209,6 @@ Initialization of DB obj.
     DB["dict_useless_heap"].get_value()  # Sorry for that, I don't know how to do it without additional method
 
     ## To get string representation of whole dict:
-    str(DB["dict_useless_heap"])
     print(DB["dict_useless_heap"])
 
     ## To get one key from dict:
@@ -245,8 +235,8 @@ Initialization of DB obj.
     DB["cars"]["burgundy"] += 1
 
 
-Advanced usage.
-=========================
+Advanced usage (can be skipped)
+================================
 
 1) class database additional arguments
 --------------------------------------------------------------------------------------------------
@@ -287,7 +277,7 @@ Both 2 main classes (**class_local_simple_database**, **class_local_dict_databas
     )
 
 
-2) Get values in ALL databases in the directory.
+2) Get values for ALL databases in the directory.
 --------------------------------------------------------------------------------------------------
 
 To get a dictionary with data in all databases by database name, use:
@@ -320,27 +310,17 @@ Links
     * `readthedocs <https://local-simple-database.readthedocs.io/en/latest/>`_
     * `GitHub <https://github.com/stas-prokopiev/local_simple_database>`_
 
-Releases
-========
+Project local Links
+===================
 
-See `CHANGELOG <https://github.com/stas-prokopiev/local_simple_database/blob/master/CHANGELOG.rst>`_.
-
-Contributing
-============
-
-- Fork it (<https://github.com/stas-prokopiev/local_simple_database/fork>)
-- Create your feature branch (`git checkout -b feature/fooBar`)
-- Commit your changes (`git commit -am 'Add some fooBar'`)
-- Push to the branch (`git push origin feature/fooBar`)
-- Create a new Pull Request
+    * `CHANGELOG <https://github.com/stas-prokopiev/local_simple_database/blob/master/CHANGELOG.rst>`_.
+    * `CONTRIBUTING <https://github.com/stas-prokopiev/local_simple_database/blob/master/CONTRIBUTING.rst>`_.
 
 Contacts
 ========
 
     * Email: stas.prokopiev@gmail.com
-
     * `vk.com <https://vk.com/stas.prokopyev>`_
-
     * `Facebook <https://www.facebook.com/profile.php?id=100009380530321>`_
 
 License
