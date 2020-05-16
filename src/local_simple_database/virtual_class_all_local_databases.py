@@ -193,15 +193,11 @@ class virtual_class_all_local_databases(object):
         # Delete not allowed symbols in name
         str_name_for_file_cleared = \
             str_name_for_file.encode('ascii', 'ignore').decode()
-
-
         str_name_for_file_cleared = re.sub(
             r'\\/\:*?"<>\|',
             "",
             str_name_for_file_cleared
         )
-
-
         assert str_name_for_file_cleared, (
             "ERROR: After deleting of symbols which are not allowed "
             "in the name of a file, DataBase file name happened to be empty"

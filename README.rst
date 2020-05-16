@@ -208,7 +208,7 @@ Initialization of databases handler
 
 .. code-block:: python
 
-    from local_simple_database import class_local_simple_database
+    from local_simple_database import class_local_dict_database
     LSD = class_local_dict_database(
         str_path_database_dir=".",
         default_value=None,
@@ -219,8 +219,9 @@ Arguments:
 #. **str_path_database_dir**:
     | If the explicit path is not given or variable is not set at all,
     | then will be used path "./local_database"
-    | Folder for database-s will be created automatically
-#. **default_value**: value to use if key in LSD not found.
+    | Folder for databases will be created automatically
+#. **default_value**: value to use for any database if key in it is not found.
+    | LSD[database_name][key] = default_value
 
 A few examples of Usage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -259,7 +260,7 @@ A few examples of Usage
 
     # You can set the default value for all databases OR for only one:
 
-    ## 1) Set default value for all database-s:
+    ## 1) Set default value for any database when can't find key:
     LSD.change_default_value(0)
 
     ## 2) Set default value for one database:
@@ -280,7 +281,14 @@ Advanced usage (can be skipped, you already know enough to use it)
 
 Both 2 main classes (**class_local_simple_database**, **class_local_dict_database**) have additional arguments:
 
-1) **float_max_seconds_per_file_operation=0.01**
+1) **str_datetime_template_for_rolling=""**
+
+    | This variable allows setting rolling save of database results using the DateTime template.
+    | If the value is not empty, then saving/retrieving results will be done from deeper folders with names satisfy the evaluation of the DateTime string template.
+    | E.G. To save daily results use "%Y%m%d" (Then deeper folder names will be like "20191230", "20191231", ...)
+    | E.G. To save hourly results use "%Y%m%d_%H" (Then deeper folder names will be like "20191230_0", "20191230_23", ...)
+
+2) **float_max_seconds_per_file_operation=0.01**
 
     | This variable is necessary for multiprocessing safe work.
     | It setting time in which LSD file accessed by process can't be accessed by any other process.
@@ -288,12 +296,6 @@ Both 2 main classes (**class_local_simple_database**, **class_local_dict_databas
     | If you use operations which from accessing value till setting new value needs more time, you are more than welcome to increase it.
     | You can set it to 0.0 if you are not using threads-processes and want the maximum speed.
 
-2) **str_datetime_template_for_rolling=""**
-
-    | This variable allows setting rolling save of database results using the DateTime template.
-    | If the value is not empty, then saving/retrieving results will be done from deeper folders with names satisfy the evaluation of the DateTime string template.
-    | E.G. To save daily results use "%Y%m%d" (Then deeper folder names will be like "20191230", "20191231", ...)
-    | E.G. To save hourly results use "%Y%m%d_%H" (Then deeper folder names will be like "20191230_0", "20191230_23", ...)
 
 .. code-block:: python
 
@@ -314,8 +316,17 @@ Both 2 main classes (**class_local_simple_database**, **class_local_dict_databas
         str_datetime_template_for_rolling=""
     )
 
+2) Rolling example
+--------------------------------------------------------------------------------------------------
 
-2) Get values for ALL databases in the directory.
+.. code-block:: python
+
+    LSD_daily_rolling = class_local_simple_database(
+        str_path_database_dir=".",
+        str_datetime_template_for_rolling="%Y%m%d"
+    )
+
+3) Get values for ALL databases in the directory.
 --------------------------------------------------------------------------------------------------
 
 To get a dictionary with data in all databases by database name, use:
