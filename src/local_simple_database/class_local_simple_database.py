@@ -1,13 +1,16 @@
 # Standard library imports
 import logging
+import datetime
 
 # Third party imports
+import dateutil.parser as parser
 
 # Local imports
 from local_simple_database.virtual_class_all_local_databases import \
     virtual_class_all_local_databases
 
 LOGGER = logging.getLogger("local_simple_database")
+LIST_ALL_SUPPORTED_TYPES = ["int", "float", "str", "datetime", "date"]
 
 class class_local_simple_database(virtual_class_all_local_databases):
     """
@@ -65,7 +68,7 @@ class class_local_simple_database(virtual_class_all_local_databases):
             str_datetime_template_for_rolling=\
                 str_datetime_template_for_rolling,
         )
-        self.list_supported_types = ["int", "float", "str"]
+        self.list_supported_types = LIST_ALL_SUPPORTED_TYPES
         self.dict_func_db_getter_by_str_db_name = {}
         self.dict_func_db_setter_by_str_db_name = {}
         self.dict_str_db_type_by_str_db_name = {}
@@ -169,10 +172,10 @@ class class_local_simple_database(virtual_class_all_local_databases):
         if str_db_type == "int":
             self.dict_list_db_allowed_types_by_str_db_name[str_db_name] = \
                 [int]
-            def getter(str_file_content):
-                if not str_file_content:
+            def getter(str_f_content):
+                if not str_f_content:
                     return int()
-                return int(str_file_content)
+                return int(str_f_content)
             self.dict_func_db_getter_by_str_db_name[str_db_name] = getter
             self.dict_func_db_setter_by_str_db_name[str_db_name] = \
                 lambda value_to_set: "%d" % value_to_set
@@ -181,10 +184,10 @@ class class_local_simple_database(virtual_class_all_local_databases):
         elif str_db_type == "float":
             self.dict_list_db_allowed_types_by_str_db_name[str_db_name] = \
                 [int, float]
-            def getter(str_file_content):
-                if not str_file_content:
+            def getter(str_f_content):
+                if not str_f_content:
                     return float()
-                return float(str_file_content)
+                return float(str_f_content)
             self.dict_func_db_getter_by_str_db_name[str_db_name] = getter
             self.dict_func_db_setter_by_str_db_name[str_db_name] = \
                 lambda value_to_set: "%d" % value_to_set
@@ -194,17 +197,38 @@ class class_local_simple_database(virtual_class_all_local_databases):
             self.dict_list_db_allowed_types_by_str_db_name[str_db_name] = \
                 [str]
             self.dict_func_db_getter_by_str_db_name[str_db_name] = \
-                lambda str_file_content: str(str_file_content)
+                lambda str_f_content: str(str_f_content)
             self.dict_func_db_setter_by_str_db_name[str_db_name] = \
                 lambda value_to_set: str(value_to_set)
+        #####
+        # datetime
         elif str_db_type == "datetime":
             self.dict_list_db_allowed_types_by_str_db_name[str_db_name] = \
-                [str]
-
-
-            self.dict_func_db_getter_by_str_db_name[str_db_name] = \
-                lambda str_file_content: str(str_file_content)
+                [datetime.date]
+            def getter(str_f_content):
+                if not str_f_content:
+                    return datetime.datetime(1970, 1, 1)
+                try:
+                    return datetime.datetime.fromisoformat(str_f_content)
+                except ValueError:
+                    return parser.parse(str_f_content)
+            self.dict_func_db_getter_by_str_db_name[str_db_name] = getter
             self.dict_func_db_setter_by_str_db_name[str_db_name] = \
-                lambda value_to_set: str(value_to_set)
-
+                lambda value_to_set: str(value_to_set.isoformat())
+        #####
+        # date
+        elif str_db_type == "date":
+            self.dict_list_db_allowed_types_by_str_db_name[str_db_name] = \
+                [datetime.date]
+            def getter(str_f_content):
+                if not str_f_content:
+                    return datetime.datetime(1970, 1, 1).date()
+                try:
+                    return \
+                        datetime.datetime.fromisoformat(str_f_content).date()
+                except ValueError:
+                    return parser.parse(str_f_content)
+            self.dict_func_db_getter_by_str_db_name[str_db_name] = getter
+            self.dict_func_db_setter_by_str_db_name[str_db_name] = \
+                lambda value_to_set: str(value_to_set.date().isoformat())
 

@@ -54,14 +54,14 @@ Then, using this package, you can do it like this:
 .. code-block:: python
 
     from local_simple_database import class_local_simple_database
-    DB = class_local_simple_database(path_to_dir_where_to_save_file)
+    LSD = class_local_simple_database(path_to_dir_where_to_save_file)
 
-and then just use everywhere in your code **DB["int_times_I_ve_eaten"]** like if it was usual dictionary.
+and then just use everywhere in your code **LSD["int_times_I_ve_eaten"]** like if it was usual dictionary.
 
 .. code-block:: python
 
-    DB["int_times_I_ve_eaten"] += 1  # To increase value in the file
-    DB["int_times_I_ve_eaten"]  # To get current value from the file
+    LSD["int_times_I_ve_eaten"] += 1  # To increase value in the file
+    LSD["int_times_I_ve_eaten"]  # To get current value from the file
 
 | After running this code with:
 | *path_to_dir_where_to_save_file = "./folder_with_all_my_databases"*
@@ -73,7 +73,7 @@ and then just use everywhere in your code **DB["int_times_I_ve_eaten"]** like if
 
 .. code-block:: python
 
-    int_value_I_was_afraid_to_lose = DB["int_times_I_ve_eaten"]
+    int_value_I_was_afraid_to_lose = LSD["int_times_I_ve_eaten"]
 
 How to name databases
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -102,9 +102,10 @@ Basic usage.
 
 This class is built to handle (saving-retrieving) one value data like integer or float.
 
-For now supported types of databases are: ["int", "float", "str"] (Probably will be enhanced soon)
+For now supported types of databases are:
 
-- This means that you can use a database with one value inside with types: integer, float, string
+- ["int", "float", "str", "datetime"] (Probably will be enhanced soon)
+- This means that one file with database can handle only type data
 
 Initialization of databases handler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -112,7 +113,7 @@ Initialization of databases handler
 .. code-block:: python
 
     from local_simple_database import class_local_simple_database
-    DB = class_local_simple_database(
+    LSD = class_local_simple_database(
         str_path_database_dir=".",
     )
 
@@ -126,7 +127,7 @@ Arguments:
 A few examples of Usage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-After you've initialized DB variable you can use:
+After you've initialized LSD object you can use:
 
 1) Integer database
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -136,30 +137,64 @@ After you've initialized DB variable you can use:
 .. code-block:: python
 
     # Process 1
-    DB["int_red_cars_drove"] += 1
-    DB["int_red_cars_drove"] += 2
+    LSD["int_red_cars_drove"] += 1
+    LSD["int_red_cars_drove"] += 2
     # Oh now, last one was burgundy
-    DB["int_red_cars_drove"] -= 1
+    LSD["int_red_cars_drove"] -= 1
 
     # Process 2
-    print("red cars already found", DB["int_red_cars_drove"])
+    print("red cars already found", LSD["int_red_cars_drove"])
     # If there was no such DataBase yet, than in will be created and 0 value will be returned.
-    DB["int_red_cars_drove"] = 5
-    print("Red cars already found: ", DB["int_red_cars_drove"])
+    LSD["int_red_cars_drove"] = 5
+    print("Red cars already found: ", LSD["int_red_cars_drove"])
 
 2) Float database
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 .. code-block:: python
 
-    DB["float_last_price_of_watermelons"] = 7.49
+    LSD["float_last_price_of_watermelons"] = 7.49
     # Too many watermelons this year, need to apply 30% discount
-    DB["float_last_price_of_watermelons"] *= 0.7
+    LSD["float_last_price_of_watermelons"] *= 0.7
     print(
         "Hello my best customer, current price on watermelons is: ",
-        DB["float_last_price_of_watermelons"]
+        LSD["float_last_price_of_watermelons"]
     )
 
+3) Datetime database
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+.. code-block:: python
+
+    import datetime
+    # Saving datetime in file in ISO format (E.G. 2020-05-16T18:00:41.780534)
+    LSD["datetime_now"] = datetime.datetime.now()
+
+    # Load datetime obj from DataBase
+    # if DB not found will be retunrs datetime for 1970-01-01
+    print("Hour was a moment ago: ", LSD["datetime_now"].hour)
+
+    # Use DataBase value to find timedelta
+    int_seconds_gone = (datetime.datetime.now() - LSD["datetime_now"]).seconds
+    print("Seconds gone: ", int_seconds_gone)
+
+4) Date database
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Very similar to datetime database, but only date will by saved
+
+.. code-block:: python
+
+    import datetime
+    # Saving datetime in file in ISO format (E.G. 2020-05-16)
+    LSD["date_now"] = datetime.datetime.now()
+
+    # Load datetime obj from DataBase
+    # if DB not found will be retunrs datetime for 1970-01-01
+    print("Date today: ", LSD["date_now"])
+
+    # Use DataBase value to find timedelta
+    if datetime.datetime.now().date() == LSD["date_now"]:
+        int_seconds_gone_today = (datetime.datetime.now() - LSD["date_now"]).seconds
+        print("Seconds already gone: ", int_seconds_gone_today)
 
 2) class_local_dict_database
 --------------------------------------------------------------------------------------------------
@@ -174,7 +209,7 @@ Initialization of databases handler
 .. code-block:: python
 
     from local_simple_database import class_local_simple_database
-    DB = class_local_dict_database(
+    LSD = class_local_dict_database(
         str_path_database_dir=".",
         default_value=None,
     )
@@ -185,7 +220,7 @@ Arguments:
     | If the explicit path is not given or variable is not set at all,
     | then will be used path "./local_database"
     | Folder for database-s will be created automatically
-#. **default_value**: value to use if key in DB not found.
+#. **default_value**: value to use if key in LSD not found.
 
 A few examples of Usage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -196,25 +231,25 @@ A few examples of Usage
 .. code-block:: python
 
     # Set methods
-    ## Set value for whole DB:
-    DB["dict_very_useful_heap"] = {"Mike": 50, "Stan": 1000000}
+    ## Set value for whole LSD:
+    LSD["dict_very_useful_heap"] = {"Mike": 50, "Stan": 1000000}
 
-    ## Set keys for one dictionary DB
+    ## Set keys for one dictionary LSD
     ## If there is no file with asked dict database then it will be created automatically
-    DB["dict_useless_heap"]["random_key"] = 1
-    DB["dict_useless_heap"]["random_key"] += 3
-    DB["dict_useless_heap"][2] = ["Oh my God, what a list is doing here", "Aaa"]
-    DB["dict_useless_heap"][99] = {"Are you serious?": {"You'd better be!": "Bbb"}}
+    LSD["dict_useless_heap"]["random_key"] = 1
+    LSD["dict_useless_heap"]["random_key"] += 3
+    LSD["dict_useless_heap"][2] = ["Oh my God, what a list is doing here", "Aaa"]
+    LSD["dict_useless_heap"][99] = {"Are you serious?": {"You'd better be!": "Bbb"}}
 
     # Get methods
-    ## To get whole dict for DB, please use:
-    DB["dict_useless_heap"].get_value()  # Sorry for that, I don't know how to do it without additional method
+    ## To get whole dict for LSD, please use:
+    LSD["dict_useless_heap"].get_value()  # Sorry for that, I don't know how to do it without additional method
 
     ## To get string representation of whole dict:
-    print(DB["dict_useless_heap"])
+    print(LSD["dict_useless_heap"])
 
     ## To get one key from dict:
-    int_random_key = DB["dict_useless_heap"]["random_key"]
+    int_random_key = LSD["dict_useless_heap"]["random_key"]
 
 
 2) Set default value:
@@ -225,16 +260,16 @@ A few examples of Usage
     # You can set the default value for all databases OR for only one:
 
     ## 1) Set default value for all database-s:
-    DB.change_default_value(0)
+    LSD.change_default_value(0)
 
     ## 2) Set default value for one database:
-    DB["cars"].change_default_value(0)
+    LSD["cars"].change_default_value(0)
 
-    # They you can use DB similarly to collections.defaultdict
-    DB["cars"]["red"] += 1
+    # They you can use LSD similarly to collections.defaultdict
+    LSD["cars"]["red"] += 1
     # Oh no, that was burgundy once again
-    DB["cars"]["red"] -= 1
-    DB["cars"]["burgundy"] += 1
+    LSD["cars"]["red"] -= 1
+    LSD["cars"]["burgundy"] += 1
 
 
 Advanced usage (can be skipped, you already know enough to use it)
@@ -248,7 +283,7 @@ Both 2 main classes (**class_local_simple_database**, **class_local_dict_databas
 1) **float_max_seconds_per_file_operation=0.01**
 
     | This variable is necessary for multiprocessing safe work.
-    | It setting time in which DB file accessed by process can't be accessed by any other process.
+    | It setting time in which LSD file accessed by process can't be accessed by any other process.
     |    By default, it is set to 10 ms for simple database and 20 ms for dict database.
     | If you use operations which from accessing value till setting new value needs more time, you are more than welcome to increase it.
     | You can set it to 0.0 if you are not using threads-processes and want the maximum speed.
@@ -263,7 +298,7 @@ Both 2 main classes (**class_local_simple_database**, **class_local_dict_databas
 .. code-block:: python
 
     # Full definition of class_local_simple_database
-    DB = class_local_simple_database(
+    LSD = class_local_simple_database(
         str_path_database_dir=".",
         float_max_seconds_per_file_operation=0.05,
         str_datetime_template_for_rolling=""
@@ -272,7 +307,7 @@ Both 2 main classes (**class_local_simple_database**, **class_local_dict_databas
 .. code-block:: python
 
     # Full definition of class_local_dict_database
-    DB = class_local_dict_database(
+    LSD = class_local_dict_database(
         str_path_database_dir=".",
         default_value=None,
         float_max_seconds_per_file_operation=0.05,
@@ -287,21 +322,21 @@ To get a dictionary with data in all databases by database name, use:
 
 .. code-block:: python
 
-    DB.get_dict_DBs_data_by_DB_name()
+    LSD.get_dict_DBs_data_by_DB_name()
 
 If you were using rolling, then you can get dictionary with results like {"datetime_1": dict_all_DBs_date_1, }
 
 .. code-block:: python
 
-    DB.get_dict_every_DB_by_datetime()
+    LSD.get_dict_every_DB_by_datetime()
 
 
 If you were using rolling, and interested only in one database. {"datetime_1": database_value_1, ...}
 
 .. code-block:: python
 
-    # Please replace *str_database_name* on name of DB which values you want to get
-    DB.get_one_DB_data_daily(
+    # Please replace *str_database_name* on name of LSD which values you want to get
+    LSD.get_one_DB_data_daily(
         str_database_name,
         value_to_use_if_DB_not_found=None
     )
