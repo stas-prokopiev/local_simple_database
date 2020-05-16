@@ -5,6 +5,7 @@ import datetime
 from time import sleep
 from collections import OrderedDict
 import logging
+import re
 
 # Third party imports
 from filelock import FileLock
@@ -192,9 +193,17 @@ class virtual_class_all_local_databases(object):
                 str_db_name + ".txt"
             )
         #####
+        str_name_for_file_cleared = \
+            re.sub(r'[\\/\:*"<>\|\.%\$\^&£]', "", str_name_for_file)
+        assert str_name_for_file_cleared, (
+            "ERROR: After deleting of symbols which are not allowed "
+            "in the name of a file, DataBase file name happened to be empty"
+            "%s -> %s" % (str_name_for_file, str_name_for_file_cleared)
+        )
+        #####
         str_file_path_with_db_file = os.path.join(
             str_db_folder,
-            str_name_for_file
+            str_name_for_file_cleared
         )
         return str_file_path_with_db_file
 

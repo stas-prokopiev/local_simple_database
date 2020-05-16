@@ -197,5 +197,14 @@ class class_local_simple_database(virtual_class_all_local_databases):
                 lambda str_file_content: str(str_file_content)
             self.dict_func_db_setter_by_str_db_name[str_db_name] = \
                 lambda value_to_set: str(value_to_set)
+        elif str_db_type == "datetime":
+            self.dict_list_db_allowed_types_by_str_db_name[str_db_name] = \
+                [str]
+
+
+            self.dict_func_db_getter_by_str_db_name[str_db_name] = \
+                lambda str_file_content: str(str_file_content)
+            self.dict_func_db_setter_by_str_db_name[str_db_name] = \
+                lambda value_to_set: str(value_to_set)
 
 

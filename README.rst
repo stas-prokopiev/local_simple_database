@@ -33,8 +33,8 @@ Short Overview.
 
 local_simple_database is a simple Python package(**py>=2.7 or py>=3.4**)
 with the main purpose to
-help storing and retrieving data from human-readable txt files with one line of code.
-All the interactions with files are being made in a process-thread safe manner.
+help storing and retrieving data from human-readable .txt files with one line of code.
+All the interactions with files are being made in a processes-threads safe manner.
 
 Long Overview.
 =========================
@@ -49,12 +49,12 @@ One small example
 
 Let's say you want to store file with int variable with name int_times_I_ve_eaten.
 
-Then using this package you can define handler of databases:
+Then, using this package, you can do it like this:
 
 .. code-block:: python
 
     from local_simple_database import class_local_simple_database
-    DB = class_local_simple_database("folder_with_all_my_databases")
+    DB = class_local_simple_database(path_to_dir_where_to_save_file)
 
 and then just use everywhere in your code **DB["int_times_I_ve_eaten"]** like if it was usual dictionary.
 
@@ -63,20 +63,19 @@ and then just use everywhere in your code **DB["int_times_I_ve_eaten"]** like if
     DB["int_times_I_ve_eaten"] += 1  # To increase value in the file
     DB["int_times_I_ve_eaten"]  # To get current value from the file
 
-After running this code in the folder with path = *"./folder_with_all_my_databases"*
+| After running this code with:
+| *path_to_dir_where_to_save_file = "./folder_with_all_my_databases"*
+| Inside directory *./folder_with_all_my_databases*
+| will be created file *"int_times_I_ve_eaten.txt"* with current value.
 
-will be created file *"int_times_I_ve_eaten.txt"* with value.
-
-Value is stored in a human-readable .txt file, so you can always access it.
-
-To get it some time later, just use:
+| Value is stored in a human-readable .txt file, so you can always access it.
+| To get it some time later or from another process just use:
 
 .. code-block:: python
 
     int_value_I_was_afraid_to_lose = DB["int_times_I_ve_eaten"]
 
-
-How to name database-s
+How to name databases
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Name of database should satisfy template "type_name"
@@ -119,9 +118,10 @@ Initialization of databases handler
 
 Arguments:
 
-1. **str_path_database_dir**: If the explicit path to directory with database-s is not given,
+1. **str_path_database_dir**:
+    | If the explicit path is not given or variable is not set at all,
     | then will be used path "./local_database"
-    | Folder for database-s will be created automatically
+    | Folder for database will be created automatically
 
 A few examples of Usage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -145,19 +145,19 @@ After you've initialized DB variable you can use:
     print("red cars already found", DB["int_red_cars_drove"])
     # If there was no such DataBase yet, than in will be created and 0 value will be returned.
     DB["int_red_cars_drove"] = 5
-    print("red cars already found", DB["int_red_cars_drove"])
+    print("Red cars already found: ", DB["int_red_cars_drove"])
 
 2) Float database
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 .. code-block:: python
 
-    DB["float_last_price_of_watermelon"] = 7.49
+    DB["float_last_price_of_watermelons"] = 7.49
     # Too many watermelons this year, need to apply 30% discount
-    DB["float_last_price_of_watermelon"] *= 0.7
+    DB["float_last_price_of_watermelons"] *= 0.7
     print(
-        "Hello my best customer, current price on watermelon is: ",
-        DB["float_last_price_of_watermelon"]
+        "Hello my best customer, current price on watermelons is: ",
+        DB["float_last_price_of_watermelons"]
     )
 
 
@@ -181,7 +181,8 @@ Initialization of databases handler
 
 Arguments:
 
-#. **str_path_database_dir**: If the explicit path to database-s is not given,
+#. **str_path_database_dir**:
+    | If the explicit path is not given or variable is not set at all,
     | then will be used path "./local_database"
     | Folder for database-s will be created automatically
 #. **default_value**: value to use if key in DB not found.
@@ -195,17 +196,18 @@ A few examples of Usage
 .. code-block:: python
 
     # Set methods
-    # Set value for whole DB:
+    ## Set value for whole DB:
     DB["dict_very_useful_heap"] = {"Mike": 50, "Stan": 1000000}
 
     ## Set keys for one dictionary DB
+    ## If there is no file with asked dict database then it will be created automatically
     DB["dict_useless_heap"]["random_key"] = 1
     DB["dict_useless_heap"]["random_key"] += 3
     DB["dict_useless_heap"][2] = ["Oh my God, what a list is doing here", "Aaa"]
     DB["dict_useless_heap"][99] = {"Are you serious?": {"You'd better be!": "Bbb"}}
 
     # Get methods
-    ## To get whole dict for DB use:
+    ## To get whole dict for DB, please use:
     DB["dict_useless_heap"].get_value()  # Sorry for that, I don't know how to do it without additional method
 
     ## To get string representation of whole dict:
@@ -228,26 +230,27 @@ A few examples of Usage
     ## 2) Set default value for one database:
     DB["cars"].change_default_value(0)
 
-    # They you can use DB similarly as collections.defaultdict
+    # They you can use DB similarly to collections.defaultdict
     DB["cars"]["red"] += 1
     # Oh no, that was burgundy once again
     DB["cars"]["red"] -= 1
     DB["cars"]["burgundy"] += 1
 
 
-Advanced usage (can be skipped)
-================================
+Advanced usage (can be skipped, you already know enough to use it)
+===================================================================
 
 1) class database additional arguments
 --------------------------------------------------------------------------------------------------
 
 Both 2 main classes (**class_local_simple_database**, **class_local_dict_database**) have additional arguments:
 
-1) **float_max_seconds_per_file_operation=0.05**
+1) **float_max_seconds_per_file_operation=0.01**
 
     | This variable is necessary for multiprocessing safe work.
-    | It set time in which access by process file can't be accessed by any other process. By default, it set to 10 ms.
-    | If you use operation which from accessing value till setting new value needs more time, you are more than welcome to increase it.
+    | It setting time in which DB file accessed by process can't be accessed by any other process.
+    |    By default, it is set to 10 ms for simple database and 20 ms for dict database.
+    | If you use operations which from accessing value till setting new value needs more time, you are more than welcome to increase it.
     | You can set it to 0.0 if you are not using threads-processes and want the maximum speed.
 
 2) **str_datetime_template_for_rolling=""**
