@@ -8,6 +8,7 @@ pytest = "*"
 pytest-cov = "*"
 local-simple-database = {editable = true,path = "."}
 ipykernel = "*"
+pyscaffold = "*"
 
 [packages]
 filelock = "*"
