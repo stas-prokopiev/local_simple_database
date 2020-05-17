@@ -1,0 +1,14 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pytest = "*"
+pytest-cov = "*"
+local-simple-database = {editable = true,path = "."}
+ipykernel = "*"
+
+[packages]
+filelock = "*"
+python-dateutil = "*"
