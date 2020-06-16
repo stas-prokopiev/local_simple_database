@@ -185,7 +185,7 @@ class virtual_class_all_local_databases(object):
         str_db_type = self.define_type_of_db_by_name(str_db_name)
         #####
         # Define file name with db
-        if not str_db_name.startswith(str_db_type + "_"):
+        if str_db_name.startswith(str_db_type + "_"):
             str_name_for_file = str_db_name
         else:
             str_name_for_file = str_db_type + "_" + str_db_name
