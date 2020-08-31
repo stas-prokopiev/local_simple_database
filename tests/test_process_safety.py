@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 import os
 from multiprocessing import Process
-from local_simple_database import class_local_simple_database
+from local_simple_database import LocalSimpleDatabase
 
 
 
 def func1():
-    db = class_local_simple_database(str_path_database_dir="tests/tmp_database")
+    db = LocalSimpleDatabase(str_path_database_dir="tests/tmp_database")
     #####
     for __ in range(100):
         db["int_new_db"] += 1
 def func2():
-    db = class_local_simple_database(str_path_database_dir="tests/tmp_database")
+    db = LocalSimpleDatabase(str_path_database_dir="tests/tmp_database")
     #####
     for __ in range(100):
         db["int_new_db"] -= 1
@@ -21,7 +21,7 @@ def func2():
 def test_multiprocessing():
     """"""
     #####
-    db = class_local_simple_database(str_path_database_dir="tests/tmp_database")
+    db = LocalSimpleDatabase(str_path_database_dir="tests/tmp_database")
     # Test 1:
     db["int_new_db"] = 0
     p = Process(target=func1)

@@ -12,7 +12,7 @@ from local_simple_database.virtual_class_all_local_databases import \
 LOGGER = logging.getLogger("local_simple_database")
 LIST_ALL_SUPPORTED_TYPES = ["int", "float", "str", "datetime", "date"]
 
-class class_local_simple_database(virtual_class_all_local_databases):
+class LocalSimpleDatabase(virtual_class_all_local_databases):
     """
     This class was built to handle all one value DataBase-s
 
@@ -61,7 +61,7 @@ class class_local_simple_database(virtual_class_all_local_databases):
             Datetime template for folder name if to use rolling
         """
         # Init class of all local DataBases
-        super(class_local_simple_database, self).__init__(
+        super(LocalSimpleDatabase, self).__init__(
             str_path_database_dir=str_path_database_dir,
             float_max_seconds_per_file_operation=\
                 float_max_seconds_per_file_operation,
@@ -80,7 +80,7 @@ class class_local_simple_database(virtual_class_all_local_databases):
         Parameters
         ----------
         """
-        return class_local_simple_database(**kwargs)
+        return LocalSimpleDatabase(**kwargs)
 
     def __getitem__(self, str_db_name):
         """self[database_name]   method for getting DB current value
@@ -162,7 +162,7 @@ class class_local_simple_database(virtual_class_all_local_databases):
         #####
         # Init new DataBase
         self.dict_str_db_type_by_str_db_name[str_db_name] = str_db_type
-        LOGGER.info(
+        LOGGER.debug(
             "Initialize new database with name " +
             str_db_name +
             " With type of values: " + str(str_db_type).upper()

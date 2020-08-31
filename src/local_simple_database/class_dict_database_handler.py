@@ -16,7 +16,7 @@ class class_dict_database_handler():
 
     Attributes
     ----------
-    self.local_dict_database_obj : object of class: class_local_dict_database
+    self.local_dict_database_obj : object of class: LocalDictDatabase
         Handler of all DICT database-s in the folder
     self.str_db_name : str
         Name of DataBase which to use
@@ -33,7 +33,7 @@ class class_dict_database_handler():
 
         Parameters
         ----------
-        local_dict_database_obj : object of class: class_local_dict_database
+        local_dict_database_obj : object of class: LocalDictDatabase
             Handler of all DICT database-s in the folder
         str_db_name : str
             Name of DataBase which to use

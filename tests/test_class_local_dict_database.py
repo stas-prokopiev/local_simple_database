@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import os
-from local_simple_database import class_local_dict_database
+from local_simple_database import LocalDictDatabase
 
 
-def test_class_local_dict_database():
+def test_LocalDictDatabase():
     """"""
-    DB = class_local_dict_database(str_path_database_dir="tests/tmp_database")
+    DB = LocalDictDatabase(str_path_database_dir="tests/tmp_database")
     DB["dict_random"] = {}
     DB["dict_random"][1] = 2
     DB["dict_random"].change_default_value(0)

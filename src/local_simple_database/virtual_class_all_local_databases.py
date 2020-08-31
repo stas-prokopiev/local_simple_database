@@ -260,7 +260,7 @@ class virtual_class_all_local_databases(object):
                     list_names_of_DB_files_cleared.append(str_filename)
                     break
             else:
-                LOGGER.info(
+                LOGGER.debug(
                     "Not DataBase file in DataBase-s folder with name: %s",
                     str_filename
                 )
@@ -300,7 +300,7 @@ class virtual_class_all_local_databases(object):
                     (str_dir_name, datetime_obj)
                 )
             except ValueError:
-                LOGGER.info(
+                LOGGER.warning(
                     "Folder name doesn't satisfy template %s: %s",
                     self.str_datetime_template_for_rolling,
                     str_dir_name

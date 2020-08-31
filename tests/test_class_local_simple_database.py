@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import os
-from local_simple_database import class_local_simple_database
+from local_simple_database import LocalSimpleDatabase
 
 
-def test_class_local_simple_database():
+def test_LocalSimpleDatabase():
     """"""
-    DB = class_local_simple_database(
+    DB = LocalSimpleDatabase(
         str_path_database_dir="tests/tmp_database"
     )
     DB2 = DB.init_new_class_obj(

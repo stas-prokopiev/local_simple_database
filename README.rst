@@ -41,8 +41,8 @@ Long Overview.
 
 This package consists of 2 main classes with which user should interact:
 
-#. class_local_simple_database
-#. class_local_dict_database
+#. LocalSimpleDatabase
+#. LocalDictDatabase
 
 One small example
 ----------------------
@@ -53,8 +53,8 @@ Then, using this package, you can do it like this:
 
 .. code-block:: python
 
-    from local_simple_database import class_local_simple_database
-    LSD = class_local_simple_database(path_to_dir_where_to_save_file)
+    from local_simple_database import LocalSimpleDatabase
+    LSD = LocalSimpleDatabase(path_to_dir_where_to_save_file)
 
 and then just use everywhere in your code **LSD["int_times_I_ve_eaten"]** like if it was usual dictionary.
 
@@ -97,7 +97,7 @@ Installation
 Basic usage.
 =========================
 
-1) class_local_simple_database
+1) LocalSimpleDatabase
 --------------------------------------------------------------------------------------------------
 
 This class is built to handle (saving-retrieving) one value data like integer or float.
@@ -112,8 +112,8 @@ Initialization of databases handler
 
 .. code-block:: python
 
-    from local_simple_database import class_local_simple_database
-    LSD = class_local_simple_database(
+    from local_simple_database import LocalSimpleDatabase
+    LSD = LocalSimpleDatabase(
         str_path_database_dir=".",
     )
 
@@ -196,20 +196,20 @@ Very similar to datetime database, but only date will by saved
         int_seconds_gone_today = (datetime.datetime.now() - LSD["date_now"]).seconds
         print("Seconds already gone: ", int_seconds_gone_today)
 
-2) class_local_dict_database
+2) LocalDictDatabase
 --------------------------------------------------------------------------------------------------
 
 This class was built to handle (saving-retrieving) dictionary with data from a file.
 
-Work with such database is a little different from **class_local_simple_database** so it was necessary to put it in a separate class
+Work with such database is a little different from **LocalSimpleDatabase** so it was necessary to put it in a separate class
 
 Initialization of databases handler
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-    from local_simple_database import class_local_dict_database
-    LSD = class_local_dict_database(
+    from local_simple_database import LocalDictDatabase
+    LSD = LocalDictDatabase(
         str_path_database_dir=".",
         default_value=None,
     )
@@ -279,7 +279,7 @@ Advanced usage (can be skipped, you already know enough to use it)
 1) class database additional arguments
 --------------------------------------------------------------------------------------------------
 
-Both 2 main classes (**class_local_simple_database**, **class_local_dict_database**) have additional arguments:
+Both 2 main classes (**LocalSimpleDatabase**, **LocalDictDatabase**) have additional arguments:
 
 1) **str_datetime_template_for_rolling=""**
 
@@ -299,8 +299,8 @@ Both 2 main classes (**class_local_simple_database**, **class_local_dict_databas
 
 .. code-block:: python
 
-    # Full definition of class_local_simple_database
-    LSD = class_local_simple_database(
+    # Full definition of LocalSimpleDatabase
+    LSD = LocalSimpleDatabase(
         str_path_database_dir=".",
         float_max_seconds_per_file_operation=0.05,
         str_datetime_template_for_rolling=""
@@ -308,8 +308,8 @@ Both 2 main classes (**class_local_simple_database**, **class_local_dict_databas
 
 .. code-block:: python
 
-    # Full definition of class_local_dict_database
-    LSD = class_local_dict_database(
+    # Full definition of LocalDictDatabase
+    LSD = LocalDictDatabase(
         str_path_database_dir=".",
         default_value=None,
         float_max_seconds_per_file_operation=0.05,
@@ -321,7 +321,7 @@ Both 2 main classes (**class_local_simple_database**, **class_local_dict_databas
 
 .. code-block:: python
 
-    LSD_daily_rolling = class_local_simple_database(
+    LSD_daily_rolling = LocalSimpleDatabase(
         str_path_database_dir=".",
         str_datetime_template_for_rolling="%Y%m%d"
     )
