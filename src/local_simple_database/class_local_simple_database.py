@@ -211,7 +211,7 @@ class LocalSimpleDatabase(VirtualAnyLocalDatabase):
             def getter(str_f_content):
                 if not str_f_content:
                     dt_obj = datetime.datetime(1970, 1, 1)
-                    dt_obj.replace(tzinfo=datetime.timezone.utc)
+                    dt_obj = dt_obj.replace(tzinfo=datetime.timezone.utc)
                     return dt_obj
                 try:
                     return datetime.datetime.fromisoformat(str_f_content)
@@ -228,7 +228,7 @@ class LocalSimpleDatabase(VirtualAnyLocalDatabase):
             def getter(str_f_content):
                 if not str_f_content:
                     dt_obj = datetime.datetime(1970, 1, 1)
-                    dt_obj.replace(tzinfo=datetime.timezone.utc)
+                    dt_obj = dt_obj.replace(tzinfo=datetime.timezone.utc)
                     return dt_obj.date()
                 try:
                     return \
