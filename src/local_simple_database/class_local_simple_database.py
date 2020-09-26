@@ -1,3 +1,4 @@
+"""Module with class to handle all simple local databases"""
 # Standard library imports
 import logging
 import datetime
@@ -7,12 +8,12 @@ import dateutil.parser as parser
 
 # Local imports
 from local_simple_database.virtual_class_all_local_databases import \
-    virtual_class_all_local_databases
+    VirtualAnyLocalDatabase
 
 LOGGER = logging.getLogger("local_simple_database")
 LIST_ALL_SUPPORTED_TYPES = ["int", "float", "str", "datetime", "date"]
 
-class LocalSimpleDatabase(virtual_class_all_local_databases):
+class LocalSimpleDatabase(VirtualAnyLocalDatabase):
     """
     This class was built to handle all one value DataBase-s
 
@@ -163,9 +164,9 @@ class LocalSimpleDatabase(virtual_class_all_local_databases):
         # Init new DataBase
         self.dict_str_db_type_by_str_db_name[str_db_name] = str_db_type
         LOGGER.debug(
-            "Initialize new database with name " +
-            str_db_name +
-            " With type of values: " + str(str_db_type).upper()
+            "Initialize new database with name %s With type of values: %s",
+            str_db_name,
+            str(str_db_type).upper()
         )
         #####
         # int
@@ -196,10 +197,12 @@ class LocalSimpleDatabase(virtual_class_all_local_databases):
         elif str_db_type == "str":
             self.dict_list_db_allowed_types_by_str_db_name[str_db_name] = \
                 [str]
-            self.dict_func_db_getter_by_str_db_name[str_db_name] = \
-                lambda str_f_content: str(str_f_content)
-            self.dict_func_db_setter_by_str_db_name[str_db_name] = \
-                lambda value_to_set: str(value_to_set)
+            self.dict_func_db_getter_by_str_db_name[str_db_name] = str
+            self.dict_func_db_setter_by_str_db_name[str_db_name] = str
+            # self.dict_func_db_getter_by_str_db_name[str_db_name] = \
+            #     lambda str_f_content: str(str_f_content)
+            # self.dict_func_db_setter_by_str_db_name[str_db_name] = \
+            #     lambda value_to_set: str(value_to_set)
         #####
         # datetime
         elif str_db_type == "datetime":
@@ -235,4 +238,3 @@ class LocalSimpleDatabase(virtual_class_all_local_databases):
             self.dict_func_db_getter_by_str_db_name[str_db_name] = getter
             self.dict_func_db_setter_by_str_db_name[str_db_name] = \
                 lambda value_to_set: str(value_to_set.date().isoformat())
-

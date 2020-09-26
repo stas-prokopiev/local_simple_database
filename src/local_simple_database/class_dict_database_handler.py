@@ -1,3 +1,4 @@
+"""Module with class to handle dict databases"""
 # Standard library imports
 import logging
 import json
@@ -8,7 +9,7 @@ import json
 
 LOGGER = logging.getLogger("local_simple_database")
 
-class class_dict_database_handler():
+class DictDatabaseHandler():
     """
     This class was built to handle one DICT DataBase
 
@@ -43,9 +44,8 @@ class class_dict_database_handler():
 
         assert str_db_name.startswith("dict_"), (
             "ERROR: dict DB name should starts with dict_ current name is: " +
-             str_db_name
+            str_db_name
         )
-
         self.str_db_name = str_db_name
         self.default_value = local_dict_database_obj.default_value
 
@@ -123,7 +123,3 @@ class class_dict_database_handler():
             Value to use if key in database is not found
         """
         self.default_value = new_default_value
-
-
-
-

@@ -1,3 +1,4 @@
+"""module with main class to process Local Databases with dictionaries"""
 # Standard library imports
 import logging
 
@@ -5,14 +6,14 @@ import logging
 
 # Local imports
 from local_simple_database.virtual_class_all_local_databases import \
-    virtual_class_all_local_databases
+    VirtualAnyLocalDatabase
 from local_simple_database.class_dict_database_handler import \
-    class_dict_database_handler
+    DictDatabaseHandler
 
 LOGGER = logging.getLogger("local_simple_database")
 
 
-class LocalDictDatabase(virtual_class_all_local_databases):
+class LocalDictDatabase(VirtualAnyLocalDatabase):
     """
     This class was built to handle dictionary DataBase-s
 
@@ -89,7 +90,7 @@ class LocalDictDatabase(virtual_class_all_local_databases):
         """
         if str_db_name not in self.dict_db_handler_by_str_db_name:
             self.dict_db_handler_by_str_db_name[str_db_name] = \
-                class_dict_database_handler(
+                DictDatabaseHandler(
                     self,
                     str_db_name
                 )
@@ -112,7 +113,7 @@ class LocalDictDatabase(virtual_class_all_local_databases):
         # Set value for database
         if str_db_name not in self.dict_db_handler_by_str_db_name:
             self.dict_db_handler_by_str_db_name[str_db_name] = \
-                class_dict_database_handler(
+                DictDatabaseHandler(
                     self,
                     str_db_name
                 )
@@ -137,5 +138,3 @@ class LocalDictDatabase(virtual_class_all_local_databases):
         for str_db_name in self.dict_db_handler_by_str_db_name:
             db_handler = self.dict_db_handler_by_str_db_name[str_db_name]
             db_handler.change_default_value(new_default_value)
-
-

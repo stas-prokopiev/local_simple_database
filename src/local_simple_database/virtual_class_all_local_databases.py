@@ -1,6 +1,6 @@
+"""Module with virtual class to contain all common methods for any database"""
 # Standard library imports
 import os
-import sys
 import datetime
 from time import sleep
 from collections import OrderedDict
@@ -15,7 +15,7 @@ from filelock import FileLock
 LOGGER = logging.getLogger("local_simple_database")
 
 
-class virtual_class_all_local_databases(object):
+class VirtualAnyLocalDatabase(object):
     """
     This is virtual class to handle all needs for all child DataBases
 
@@ -64,7 +64,7 @@ class virtual_class_all_local_databases(object):
         )
 
         # If dir with database doesn't exists, then create it
-        if (not os.path.isdir(self.str_path_main_database_dir)):
+        if not os.path.isdir(self.str_path_main_database_dir):
             os.makedirs(self.str_path_main_database_dir)
         #####
         self.str_datetime_template_for_rolling = \
@@ -100,8 +100,8 @@ class virtual_class_all_local_databases(object):
                 sleep(self.float_max_seconds_per_file_operation)
         #####
         # Read from file
-        with open(str_db_file, 'r') as f:
-            str_whole_file = f.read()
+        with open(str_db_file, 'r') as file_handle:
+            str_whole_file = file_handle.read()
         return str_whole_file
 
     def save_file_content(self, str_content, str_db_name):
@@ -135,8 +135,8 @@ class virtual_class_all_local_databases(object):
                     sleep(self.float_max_seconds_per_file_operation)
         #####
         # WRITE to file
-        with open(str_db_file, "w") as f:
-            f.write(str_content)
+        with open(str_db_file, "w") as file_handle:
+            file_handle.write(str_content)
         #####
         # Release filelock if necessary
         if self.float_max_seconds_per_file_operation > 0:
@@ -158,7 +158,7 @@ class virtual_class_all_local_databases(object):
             self.str_path_main_database_dir,
             str_folder_name
         )
-        if (not os.path.isdir(str_db_folder)):
+        if not os.path.isdir(str_db_folder):
             os.makedirs(str_db_folder)
         return str_db_folder
 
@@ -210,7 +210,7 @@ class virtual_class_all_local_databases(object):
         )
         return str_file_path_with_db_file
 
-    def get_names_of_files_in_DBs_dir(self):
+    def get_names_of_files_in_dbs_dir(self):
         """Get names of files in current directory of DataBase
 
         Parameters
@@ -237,18 +237,18 @@ class virtual_class_all_local_databases(object):
         )
         return list_all_filenames
 
-    def get_list_names_of_all_files_with_DBs_in_dir(self):
+    def get_list_names_of_all_files_with_dbs_in_dir(self):
         """Getting all names of databases in DB-handler folder
 
         Parameters
         ----------
         """
-        list_names_of_DB_files = self.get_names_of_files_in_DBs_dir()
-        list_names_of_DB_files_cleared = []
+        list_names_of_db_files = self.get_names_of_files_in_dbs_dir()
+        list_names_of_db_files_cleared = []
         LOGGER.debug("Trying to filter out only allowed DB types.")
         LOGGER.debug("Allowed types found: %d", len(self.list_supported_types))
         # For every file with DB get data from file
-        for int_file_num, str_filename in enumerate(list_names_of_DB_files):
+        for int_file_num, str_filename in enumerate(list_names_of_db_files):
             LOGGER.debug("%d) Get data from: %s", int_file_num, str_filename)
             for str_type in self.list_supported_types:
                 if str_filename.startswith(str_type + "_"):
@@ -257,7 +257,7 @@ class virtual_class_all_local_databases(object):
                         str_filename,
                         str_type
                     )
-                    list_names_of_DB_files_cleared.append(str_filename)
+                    list_names_of_db_files_cleared.append(str_filename)
                     break
             else:
                 LOGGER.debug(
@@ -265,9 +265,9 @@ class virtual_class_all_local_databases(object):
                     str_filename
                 )
         LOGGER.debug(
-            "Found files with DBs: %d", len(list_names_of_DB_files_cleared)
+            "Found files with DBs: %d", len(list_names_of_db_files_cleared)
         )
-        return list_names_of_DB_files_cleared
+        return list_names_of_db_files_cleared
 
     def get_dir_names_of_all_dirs_with_rolling_DBs(self):
         """Getting names of dir-s with rolling results for DataBase
@@ -322,9 +322,9 @@ class virtual_class_all_local_databases(object):
         """
         dict_data_by_str_db_name = {}
         LOGGER.debug("Collect all DB data as dict.")
-        list_names_of_DB_files = \
-            self.get_list_names_of_all_files_with_DBs_in_dir()
-        for str_db_name in list_names_of_DB_files:
+        list_names_of_db_files = \
+            self.get_list_names_of_all_files_with_dbs_in_dir()
+        for str_db_name in list_names_of_db_files:
             dict_data_by_str_db_name[str_db_name] = self[str_db_name]
         return dict_data_by_str_db_name
 
@@ -366,7 +366,7 @@ class virtual_class_all_local_databases(object):
         value_to_use_if_DB_not_found : object
             value to set if results for some days not found
         """
-        dict_DBs_results_by_date = OrderedDict()
+        dict_dbs_results_by_date = OrderedDict()
         list_str_dir_names = self.get_dir_names_of_all_dirs_with_rolling_DBs()
         #####
         # Get data from every day
@@ -378,20 +378,13 @@ class virtual_class_all_local_databases(object):
             new_db_obj = self.init_new_class_obj(
                 str_path_database_dir=str_dir_path
             )
-            list_DBs_names = \
-                new_db_obj.get_list_names_of_all_files_with_DBs_in_dir()
+            list_dbs_names = \
+                new_db_obj.get_list_names_of_all_files_with_dbs_in_dir()
 
-            if str_db_name in list_DBs_names:
-                dict_DBs_results_by_date[str(str_dir_name)] = \
+            if str_db_name in list_dbs_names:
+                dict_dbs_results_by_date[str(str_dir_name)] = \
                     new_db_obj[str_db_name]
             elif value_to_use_if_DB_not_found is not None:
-                dict_DBs_results_by_date[str(str_dir_name)] = \
+                dict_dbs_results_by_date[str(str_dir_name)] = \
                     value_to_use_if_DB_not_found
-        return dict_DBs_results_by_date
-
-
-
-
-
-
-
+        return dict_dbs_results_by_date
