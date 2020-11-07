@@ -333,7 +333,7 @@ To get a dictionary with data in all databases by database name, use:
 
 .. code-block:: python
 
-    LSD.get_dict_DBs_data_by_DB_name()
+    LSD.get_dict_data_by_db_name()
 
 If you were using rolling, then you can get dictionary with results like {"datetime_1": dict_all_DBs_date_1, }
 
@@ -347,9 +347,9 @@ If you were using rolling, and interested only in one database. {"datetime_1": d
 .. code-block:: python
 
     # Please replace *str_database_name* on name of LSD which values you want to get
-    LSD.get_one_DB_data_daily(
+    LSD.get_one_db_data_daily(
         str_database_name,
-        value_to_use_if_DB_not_found=None
+        value_to_use_if_db_not_found=None
     )
 
 Links

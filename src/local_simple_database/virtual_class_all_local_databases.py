@@ -95,8 +95,8 @@ class VirtualAnyLocalDatabase(object):
                     timeout=self.float_max_seconds_per_file_operation,
                     poll_intervall=self.float_max_seconds_per_file_operation / 10.0
                 )
-            except TimeoutError:
-                LOGGER.debug("Timeout except occurred for filelock")
+            except Exception:
+                LOGGER.debug("Exception occurred for filelock")
                 sleep(self.float_max_seconds_per_file_operation)
         #####
         # Read from file
@@ -130,8 +130,8 @@ class VirtualAnyLocalDatabase(object):
                         poll_intervall=\
                             self.float_max_seconds_per_file_operation / 10.0
                     )
-                except TimeoutError:
-                    LOGGER.debug("Timeout except occurred for filelock")
+                except Exception:
+                    LOGGER.debug("Exception occurred for filelock")
                     sleep(self.float_max_seconds_per_file_operation)
         #####
         # WRITE to file
@@ -314,7 +314,7 @@ class VirtualAnyLocalDatabase(object):
         ]
         return list_dir_names_cleared
 
-    def get_dict_DBs_data_by_DB_name(self):
+    def get_dict_data_by_db_name(self):
         """Getting dict with data of every database in the dir of DataBase
 
         Parameters
@@ -348,13 +348,13 @@ class VirtualAnyLocalDatabase(object):
                 str_path_database_dir=str_dir_path
             )
             dict_dict_DBs_data_by_DB_name_by_date[str(str_dir_name)] = \
-                new_db_obj.get_dict_DBs_data_by_DB_name()
+                new_db_obj.get_dict_data_by_db_name()
         return dict_dict_DBs_data_by_DB_name_by_date
 
-    def get_one_DB_data_daily(
+    def get_one_db_data_daily(
             self,
             str_db_name,
-            value_to_use_if_DB_not_found=None
+            value_to_use_if_db_not_found=None
     ):
         """
         Getting {date_1: value_1, date_2: value_2, ...} for one database
@@ -363,7 +363,7 @@ class VirtualAnyLocalDatabase(object):
         ----------
         str_db_name : str
             Name of DataBase which to use
-        value_to_use_if_DB_not_found : object
+        value_to_use_if_db_not_found : object
             value to set if results for some days not found
         """
         dict_dbs_results_by_date = OrderedDict()
@@ -384,7 +384,7 @@ class VirtualAnyLocalDatabase(object):
             if str_db_name in list_dbs_names:
                 dict_dbs_results_by_date[str(str_dir_name)] = \
                     new_db_obj[str_db_name]
-            elif value_to_use_if_DB_not_found is not None:
+            elif value_to_use_if_db_not_found is not None:
                 dict_dbs_results_by_date[str(str_dir_name)] = \
-                    value_to_use_if_DB_not_found
+                    value_to_use_if_db_not_found
         return dict_dbs_results_by_date
