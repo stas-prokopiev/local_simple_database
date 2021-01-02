@@ -215,7 +215,7 @@ class LocalSimpleDatabase(VirtualAnyLocalDatabase):
                     return dt_obj
                 try:
                     return datetime.datetime.fromisoformat(str_f_content)
-                except ValueError:
+                except (ValueError, AttributeError):
                     return parser.parse(str_f_content)
             self.dict_func_db_getter_by_str_db_name[str_db_name] = getter
             self.dict_func_db_setter_by_str_db_name[str_db_name] = \
@@ -233,7 +233,7 @@ class LocalSimpleDatabase(VirtualAnyLocalDatabase):
                 try:
                     return \
                         datetime.datetime.fromisoformat(str_f_content).date()
-                except ValueError:
+                except (ValueError, AttributeError):
                     return parser.parse(str_f_content)
             self.dict_func_db_getter_by_str_db_name[str_db_name] = getter
             self.dict_func_db_setter_by_str_db_name[str_db_name] = \
