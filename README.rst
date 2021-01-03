@@ -209,7 +209,7 @@ Initialization of databases handler
 .. code-block:: python
 
     from local_simple_database import LocalDictDatabase
-    LSD = LocalDictDatabase(
+    LDD = LocalDictDatabase(
         str_path_database_dir=".",
         default_value=None,
     )
@@ -221,7 +221,7 @@ Arguments:
     | then will be used path "./local_database"
     | Folder for databases will be created automatically
 #. **default_value**: value to use for any database if key in it is not found.
-    | LSD[database_name][key] = default_value
+    | LDD[database_name][key] = default_value
 
 A few examples of Usage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -232,25 +232,25 @@ A few examples of Usage
 .. code-block:: python
 
     # Set methods
-    ## Set value for whole LSD:
-    LSD["dict_very_useful_heap"] = {"Mike": 50, "Stan": 1000000}
+    ## Set value for whole LDD:
+    LDD["dict_very_useful_heap"] = {"Mike": 50, "Stan": 1000000}
 
-    ## Set keys for one dictionary LSD
+    ## Set keys for one dictionary LDD
     ## If there is no file with asked dict database then it will be created automatically
-    LSD["dict_useless_heap"]["random_key"] = 1
-    LSD["dict_useless_heap"]["random_key"] += 3
-    LSD["dict_useless_heap"][2] = ["Oh my God, what a list is doing here", "Aaa"]
-    LSD["dict_useless_heap"][99] = {"Are you serious?": {"You'd better be!": "Bbb"}}
+    LDD["dict_useless_heap"]["random_key"] = 1
+    LDD["dict_useless_heap"]["random_key"] += 3
+    LDD["dict_useless_heap"][2] = ["Oh my God, what a list is doing here", "Aaa"]
+    LDD["dict_useless_heap"][99] = {"Are you serious?": {"You'd better be!": "Bbb"}}
 
     # Get methods
-    ## To get whole dict for LSD, please use:
-    LSD["dict_useless_heap"].get_value()  # Sorry for that, I don't know how to do it without additional method
+    ## To get whole dict for LDD, please use:
+    LDD["dict_useless_heap"].get_value()  # Sorry for that, I don't know how to do it without additional method
 
     ## To get string representation of whole dict:
-    print(LSD["dict_useless_heap"])
+    print(LDD["dict_useless_heap"])
 
     ## To get one key from dict:
-    int_random_key = LSD["dict_useless_heap"]["random_key"]
+    int_random_key = LDD["dict_useless_heap"]["random_key"]
 
 
 2) Set default value:
@@ -261,16 +261,16 @@ A few examples of Usage
     # You can set the default value for all databases OR for only one:
 
     ## 1) Set default value for any database when can't find key:
-    LSD.change_default_value(0)
+    LDD.change_default_value(0)
 
     ## 2) Set default value for one database:
-    LSD["cars"].change_default_value(0)
+    LDD["cars"].change_default_value(0)
 
-    # They you can use LSD similarly to collections.defaultdict
-    LSD["cars"]["red"] += 1
+    # They you can use LDD similarly to collections.defaultdict
+    LDD["cars"]["red"] += 1
     # Oh no, that was burgundy once again
-    LSD["cars"]["red"] -= 1
-    LSD["cars"]["burgundy"] += 1
+    LDD["cars"]["red"] -= 1
+    LDD["cars"]["burgundy"] += 1
 
 
 Advanced usage (can be skipped, you already know enough to use it)
@@ -309,7 +309,7 @@ Both 2 main classes (**LocalSimpleDatabase**, **LocalDictDatabase**) have additi
 .. code-block:: python
 
     # Full definition of LocalDictDatabase
-    LSD = LocalDictDatabase(
+    LDD = LocalDictDatabase(
         str_path_database_dir=".",
         default_value=None,
         float_max_seconds_per_file_operation=0.05,
