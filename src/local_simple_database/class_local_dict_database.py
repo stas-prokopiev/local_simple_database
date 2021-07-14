@@ -1,4 +1,5 @@
 """module with main class to process Local Databases with dictionaries"""
+from __future__ import unicode_literals
 # Standard library imports
 import logging
 

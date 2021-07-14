@@ -1,4 +1,5 @@
 """Module with class to handle all simple local databases"""
+from __future__ import unicode_literals
 # Standard library imports
 import logging
 import datetime
@@ -137,10 +138,10 @@ class LocalSimpleDatabase(VirtualAnyLocalDatabase):
         str_db_name : str
             Name of DataBase which to use
         """
-        assert isinstance(str_db_name, str), (
-            "ERROR: DataBase name should have type str, now it is: " +
-            str(type(str_db_name))
-        )
+        # assert isinstance(str_db_name, str), (
+        #     "ERROR: DataBase name should have type str, now it is: " +
+        #     str(type(str_db_name))
+        # )
         assert str_db_name, "ERROR: Database name should not be empty"
         #####
         # If DB already initialized then finish execution

@@ -1,4 +1,5 @@
 """Module with class to handle dict databases"""
+from __future__ import unicode_literals
 # Standard library imports
 import logging
 import json

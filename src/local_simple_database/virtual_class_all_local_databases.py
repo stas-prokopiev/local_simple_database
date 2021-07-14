@@ -1,4 +1,5 @@
 """Module with virtual class to contain all common methods for any database"""
+from __future__ import unicode_literals
 # Standard library imports
 import os
 import datetime
