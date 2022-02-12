@@ -238,4 +238,4 @@ class LocalSimpleDatabase(VirtualAnyLocalDatabase):
                     return parser.parse(str_f_content)
             self.dict_func_db_getter_by_str_db_name[str_db_name] = getter
             self.dict_func_db_setter_by_str_db_name[str_db_name] = \
-                lambda value_to_set: str(value_to_set.date().isoformat())
+                lambda value_to_set: str(value_to_set.isoformat())
